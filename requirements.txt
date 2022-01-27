@@ -1,0 +1,5 @@
+numpy
+tensorflow
+gym
+Box2D
+gym[all]
