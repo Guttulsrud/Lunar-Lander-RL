@@ -3,22 +3,27 @@ import gym
 env = gym.make('LunarLander-v2')
 
 
-def handle_observation(observation):
+def format_observation(observation):
+    return {
+        'position': {
+            'x': observation[0],
+            'y': observation[1],
+            'angle': observation[4],
+        },
+        'velocity': {
+            'x': observation[2],
+            'y': observation[3],
+            'angular_velocity': observation[5],
+        },
+
+        'left_leg_contact': observation[6],
+        'right_leg_contact': observation[7]
+    }
+
     # Observation Space
     # There are 8 states: the coordinates of the lander in `x` & `y`, its linear
     # velocities in `x` & `y`, its angle, its angular velocity, and two boleans
     # showing if each leg is in contact with the ground or not.
-
-    x_coordinate = observation[0]
-    y_coordinate = observation[1]
-    x_linear_velocity = observation[2]
-    y_linear_velocity = observation[3]
-    angle = observation[4]
-    angular_velocity = observation[5]
-    left_leg_contact = observation[6]
-    right_leg_contact = observation[7]
-
-    return 'nje'
 
 
 def get_action(env):
@@ -29,16 +34,50 @@ def get_action(env):
     return action
 
 
-for episode in range(100):
-    observation = env.reset()
-    for step in range(50):
-        env.render()
-        action = get_action(env)
+# Starting State
+# The lander starts at the top center of the viewport with a random initial
+# force applied to its center of mass.
+#
+# ### Episode Termination
+# The episode finishes if:
+# 1) the lander crashes (the lander body gets in contact with the moon);
+# 2) the lander gets outside of the viewport (`x` coordinate is greater than 1);
+# 3) the lander is not awake.
+#       From the [Box2D docs](https://box2d.org/documentation/md__d_1__git_hub_box2d_docs_dynamics.html#autotoc_md61),
+#     a body which is not awake is a body which doesn't move and doesn't
+#     collide with any other body:
+# > When Box2D determines that a body (or group of bodies) has come to rest,
+# > the body enters a sleep state which has very little CPU overhead. If a
+# > body is awake and collides with a sleeping body, then the sleeping body
+# > wakes up. Bodies will also wake up if a joint or contact attached to
+# > them is destroyed.
 
-        observation, reward, done, info = env.step(action)
+class Agent:
 
-        handle_observation(observation)
+    def __init__(self):
+        print('nje')
 
+    def run(self, env, observation):
+        action = env.action_space.sample()
+        return action
+
+
+def run():
+    agent = Agent()
+
+    for episode in range(100):
+        observation = format_observation(env.reset())
+
+        for step in range(50):
+            env.render()
+            action = agent.run(env, observation)
+
+            observation, reward, done, info = env.step(action)
+
+            observation = format_observation(observation)
+
+
+run()
 # Rewards
 # Reward for moving from the top of the screen to the landing pad and zero
 # speed is about 100..140 points.
