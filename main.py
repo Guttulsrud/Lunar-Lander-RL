@@ -1,89 +1,153 @@
-import gym
+from __future__ import absolute_import, division, print_function
 
-env = gym.make('LunarLander-v2')
+import numpy as np
+import reverb
+
+import tensorflow as tf
+
+from tf_agents.agents.dqn import dqn_agent
+from tf_agents.drivers import py_driver
+from tf_agents.environments import suite_gym
+from tf_agents.environments import tf_py_environment
+from tf_agents.eval import metric_utils
+from tf_agents.metrics import tf_metrics
+from tf_agents.networks import sequential
+from tf_agents.policies import py_tf_eager_policy
+from tf_agents.policies import random_tf_policy
+from tf_agents.replay_buffers import reverb_replay_buffer
+from tf_agents.replay_buffers import reverb_utils
+from tf_agents.trajectories import trajectory
+from tf_agents.specs import tensor_spec
+from tf_agents.utils import common
 
 
-def format_observation(observation):
-    return {
-        'position': {
-            'x': observation[0],
-            'y': observation[1],
-            'angle': observation[4],
-        },
-        'velocity': {
-            'x': observation[2],
-            'y': observation[3],
-            'angular_velocity': observation[5],
-        },
+env_name = 'LunarLander-v2'
 
-        'left_leg_contact': observation[6],
-        'right_leg_contact': observation[7]
-    }
-
-    # Observation Space
-    # There are 8 states: the coordinates of the lander in `x` & `y`, its linear
-    # velocities in `x` & `y`, its angle, its angular velocity, and two boleans
-    # showing if each leg is in contact with the ground or not.
+num_iterations = 20000
+initial_collect_steps = 100
+collect_steps_per_iteration = 1
+replay_buffer_max_length = 100000
+batch_size = 64
+log_interval = 200
+num_eval_episodes = 10
+eval_interval = 1000
 
 
 def get_action(env):
-    # Action Space
-    # There are four discrete actions available: do nothing, fire left
-    # orientation engine, fire main engine, fire right orientation engine.
     action = env.action_space.sample()
     return action
 
 
-# Starting State
-# The lander starts at the top center of the viewport with a random initial
-# force applied to its center of mass.
-#
-# ### Episode Termination
-# The episode finishes if:
-# 1) the lander crashes (the lander body gets in contact with the moon);
-# 2) the lander gets outside of the viewport (`x` coordinate is greater than 1);
-# 3) the lander is not awake.
-#       From the [Box2D docs](https://box2d.org/documentation/md__d_1__git_hub_box2d_docs_dynamics.html#autotoc_md61),
-#     a body which is not awake is a body which doesn't move and doesn't
-#     collide with any other body:
-# > When Box2D determines that a body (or group of bodies) has come to rest,
-# > the body enters a sleep state which has very little CPU overhead. If a
-# > body is awake and collides with a sleeping body, then the sleeping body
-# > wakes up. Bodies will also wake up if a joint or contact attached to
-# > them is destroyed.
+def compute_avg_return(environment, policy, num_episodes=10):
+    total_return = 0.0
+    for _ in range(num_episodes):
 
-class Agent:
+        time_step = environment.reset()
+        episode_return = 0.0
 
-    def __init__(self):
-        print('nje')
+        while not time_step.is_last():
+            action_step = policy.action(time_step)
+            time_step = environment.step(action_step.action)
+            episode_return += time_step.reward
+        total_return += episode_return
 
-    def run(self, env, observation):
-        action = env.action_space.sample()
-        return action
+    avg_return = total_return / num_episodes
+    return avg_return.numpy()[0]
 
 
 def run():
-    agent = Agent()
-
-    for episode in range(100):
-        observation = format_observation(env.reset())
-
-        for step in range(50):
-            env.render()
-            action = agent.run(env, observation)
-
-            observation, reward, done, info = env.step(action)
-
-            observation = format_observation(observation)
+    pass
+    #train_py_env = suite_gym.load(env_name)
+    # eval_py_env = suite_gym.load(env_name)
+    # env = suite_gym.load(env_name)
+    # train_env = tf_py_environment.TFPyEnvironment(train_py_env)
+    # eval_env = tf_py_environment.TFPyEnvironment(eval_py_env)
+    #
+    # options = {
+    #     'network_shape': [8]
+    # }
+    # AG = AgentController(options, train_env, env)
+    # agent = AG.get_agent()
+    #
+    # table_name = 'uniform_table'
+    # replay_buffer_signature = tensor_spec.from_spec(
+    #     agent.collect_data_spec)
+    # replay_buffer_signature = tensor_spec.add_outer_dim(
+    #     replay_buffer_signature)
+    #
+    # table = reverb.Table(
+    #     table_name,
+    #     max_size=replay_buffer_max_length,
+    #     sampler=reverb.selectors.Uniform(),
+    #     remover=reverb.selectors.Fifo(),
+    #     rate_limiter=reverb.rate_limiters.MinSize(1),
+    #     signature=replay_buffer_signature)
+    #
+    # reverb_server = reverb.Server([table])
+    #
+    # replay_buffer = reverb_replay_buffer.ReverbReplayBuffer(
+    #     agent.collect_data_spec,
+    #     table_name=table_name,
+    #     sequence_length=2,
+    #     local_server=reverb_server)
+    #
+    # rb_observer = reverb_utils.ReverbAddTrajectoryObserver(
+    #     replay_buffer.py_client,
+    #     table_name,
+    #     sequence_length=2)
+    #
+    # py_driver.PyDriver(
+    #     train_py_env,
+    #     py_tf_eager_policy.PyTFEagerPolicy(
+    #         AG.get_policy(), use_tf_function=True),
+    #     [rb_observer],
+    #     max_steps=initial_collect_steps).get_policy(train_py_env.reset())
+    #
+    # dataset = replay_buffer.as_dataset(
+    #     num_parallel_calls=3,
+    #     sample_batch_size=batch_size,
+    #     num_steps=2).prefetch(3)
+    # iterator = iter(dataset)
+    #
+    # # (Optional) Optimize by wrapping some of the code in a graph using TF function.
+    # # agent.train = common.function(agent.train)
+    #
+    # # Reset the train step.
+    # agent.train_step_counter.assign(0)
+    #
+    # # Evaluate the agent's policy once before training.
+    # avg_return = compute_avg_return(eval_env, agent.policy, num_eval_episodes)
+    # returns = [avg_return]
+    #
+    # # Reset the environment.
+    # time_step = train_py_env.reset()
+    #
+    # # Create a driver to collect experience.
+    # collect_driver = py_driver.PyDriver(
+    #     env,
+    #     py_tf_eager_policy.PyTFEagerPolicy(
+    #         agent.collect_policy, use_tf_function=True),
+    #     [rb_observer],
+    #     max_steps=collect_steps_per_iteration)
+    #
+    # for _ in range(num_iterations):
+    #
+    #     # Collect a few steps and save to the replay buffer.
+    #     time_step, _ = collect_driver.run(time_step)
+    #
+    #     # Sample a batch of data from the buffer and update the agent's network.
+    #     experience, unused_info = next(iterator)
+    #     train_loss = agent.train(experience).loss
+    #
+    #     step = agent.train_step_counter.numpy()
+    #
+    #     if step % log_interval == 0:
+    #         print('step = {0}: loss = {1}'.format(step, train_loss))
+    #
+    #     if step % eval_interval == 0:
+    #         avg_return = compute_avg_return(eval_env, agent.policy, num_eval_episodes)
+    #         print('step = {0}: Average Return = {1}'.format(step, avg_return))
+    #         returns.append(avg_return)
 
 
 run()
-# Rewards
-# Reward for moving from the top of the screen to the landing pad and zero
-# speed is about 100..140 points.
-# If the lander moves away from the landing pad it loses reward.
-# If the lander crashes, it receives an additional -100 points. If it comes
-# to rest, it receives an additional +100 points. Each leg with ground
-# contact is +10 points.
-# Firing the main engine is -0.3 points each frame. Firing the side engine
-# is -0.03 points each frame. Solved is 200 points.
