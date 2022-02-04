@@ -1,3 +1,11 @@
+from tensorflow.python.framework.indexed_slices import tensor_spec
+import tensorflow as tf
+from tensorflow.python.keras.optimizer_v1 import Adam
+from tf_agents.agents.dqn import dqn_agent
+from tf_agents.networks import sequential
+from tf_agents.specs import tensor_spec
+from tf_agents.utils import common
+
 
 def dense_layer(num_units):
     return tf.keras.layers.Dense(
