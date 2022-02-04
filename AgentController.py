@@ -1,6 +1,5 @@
 from tensorflow.python.framework.indexed_slices import tensor_spec
 import tensorflow as tf
-from tensorflow.python.keras.optimizer_v1 import Adam
 from tf_agents.agents.dqn import dqn_agent
 from tf_agents.networks import sequential
 from tf_agents.specs import tensor_spec
@@ -17,11 +16,10 @@ def dense_layer(num_units):
 
 class AgentController:
 
-    def __init__(self, options, train_env, env):
-        fc_layer_params = (100, 50)
-        action_tensor_spec = tensor_spec.from_spec(env.action_spec())
+    def __init__(self, options, train_env):
+        fc_layer_params = [90, 40]
+        action_tensor_spec = tensor_spec.from_spec(train_env.action_spec())
         num_actions = action_tensor_spec.maximum - action_tensor_spec.minimum + 1
-
         # Define a helper function to create Dense layers configured with the right
         # activation and kernel initializer.
         def dense_layer(num_units):
@@ -43,16 +41,11 @@ class AgentController:
             bias_initializer=tf.keras.initializers.Constant(-0.2))
         q_net = sequential.Sequential(dense_layers + [q_values_layer])
 
-        # q_net = Sequential()
-        # q_net.add(Dense(8, input_shape=(8,)))
-        # q_net.add(Dense(4))
-        # q_net.compile(optimizer='adam', loss='mse')
-
         self.agent = dqn_agent.DqnAgent(
             train_env.time_step_spec(),
             train_env.action_spec(),
             q_network=q_net,
-            optimizer=Adam(),
+            optimizer=tf.keras.optimizers.Adam(),
             td_errors_loss_fn=common.element_wise_squared_loss,
             train_step_counter=tf.Variable(0))
 
