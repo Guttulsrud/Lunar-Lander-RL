@@ -1,5 +1,7 @@
+import json
+
+
 def format_observation(observation):
-    observation = observation['observation']
     return {
 
         'position': {
@@ -16,6 +18,11 @@ def format_observation(observation):
         'left_leg_contact': observation[6],
         'right_leg_contact': observation[7]
     }
+
+
+def get_config():
+    f = open('config.json')
+    return json.load(f)
 
 
 def compute_avg_return(environment, policy, num_episodes=10, render=False):

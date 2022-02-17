@@ -1,0 +1,31 @@
+{
+  "network": {
+    "layers": [
+      {
+        "nodes": 50,
+        "activation": "relu"
+      },
+      {
+        "nodes": 50,
+        "activation": "relu"
+      },
+      {
+        "nodes": 4,
+        "activation": "linear"
+      }
+    ],
+    "loss_function": "mse",
+    "optimizer": "adam",
+    "learning_rate": 0.001
+  },
+  "training": {
+    "batch_size": 64,
+    "epsilon": {
+      "min": 0.01,
+      "max": 1.0,
+      "change": 0.996
+    }
+  },
+  "num_episodes": 100,
+  "num_env_steps": 100
+}

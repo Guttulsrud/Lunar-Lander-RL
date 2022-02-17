@@ -1,32 +1,22 @@
-import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import Dense, Input
 from tensorflow.keras.models import Sequential
-
-options = {
-    'network': {
-        'layers': [
-            {'nodes': 50, 'activation': 'relu'},
-            {'nodes': 50, 'activation': 'relu'},
-            {'nodes': 4, 'activation': 'linear'},
-        ],
-        'loss': 'mse',
-        "learning_rate": 1e-3,
-    }
-
-}
+from tensorflow.keras.optimizers import Adam
 
 
 def get_q_network(options):
     layers = options['layers']
-    network = Sequential()
+    learning_rate = options['learning_rate']
+    loss_function = options['loss_function']
+    model = Sequential()
 
-    network.add(keras.Input(shape=(8,)))
+    model.add(Input(shape=(8,)))
 
     for layer in layers:
-        network.add(Dense(layer['nodes'], activation=layer['activation']))
+        model.add(Dense(layer['nodes'], activation=layer['activation']))
 
-    return network
+    model.compile(loss=loss_function, optimizer=Adam(learning_rate))
+    return model
 
 
-get_q_network(options)
+
+
