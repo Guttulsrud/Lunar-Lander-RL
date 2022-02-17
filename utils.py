@@ -32,7 +32,7 @@ def compute_avg_return(environment, policy, num_episodes=10, render=False):
 
             if render:
                 environment.render()
-
+        print('Reward: ', episode_return[0])
         total_return += episode_return
 
     avg_return = total_return / num_episodes
