@@ -1,4 +1,5 @@
 numpy
 tensorflow
-tf_agents
+# tf_agents
 Box2D
+matplotlib

@@ -36,3 +36,10 @@ to rest, it receives an additional +100 points. Each leg with ground
 contact is +10 points.
 Firing the main engine is -0.3 points each frame. Firing the side engine
 is -0.03 points each frame. Solved is 200 points.
+
+
+# Installation
+
+1. Create and activate new conda environment 
+2. Run pip install -r requirements.txt
+3. 
