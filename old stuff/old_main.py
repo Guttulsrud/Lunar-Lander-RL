@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function
 from tf_agents.policies import random_tf_policy
 from agent import get_agent
-from utils import compute_avg_return
+from old_utils import compute_avg_return
 from tf_agents.drivers import dynamic_step_driver
 from tf_agents.environments import suite_gym
 from tf_agents.environments import tf_py_environment

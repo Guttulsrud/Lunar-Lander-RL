@@ -2,11 +2,11 @@
   "network": {
     "layers": [
       {
-        "nodes": 50,
+        "nodes": 64,
         "activation": "relu"
       },
       {
-        "nodes": 50,
+        "nodes": 64,
         "activation": "relu"
       },
       {
@@ -23,9 +23,16 @@
     "epsilon": {
       "min": 0.01,
       "max": 1.0,
-      "change": 0.996
+      "change": 0.99
     }
   },
-  "num_episodes": 100,
-  "num_env_steps": 100
+  "number_of_episodes": 100,
+  "max_steps": 200,
+  "input_dimensions": 8,
+  "number_of_actions": 4,
+  "gamma": 0.99,
+  "save_location": "models/",
+  "memory": {
+    "size": 1000000
+  }
 }

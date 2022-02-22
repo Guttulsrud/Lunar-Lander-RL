@@ -1,32 +1,46 @@
-from network import get_q_network
-from collections import deque
+from Agent import Agent
+from utils import get_config
 import gym
+import numpy as np
 
-from utils import get_config, format_observation
+if __name__ == '__main__':
 
-config = get_config()
+    config = get_config()
+    agent = Agent(config)
+    env = gym.make('LunarLander-v2')
 
-num_episodes = config['num_episodes']
-num_env_steps = config['num_env_steps']
-q_network = get_q_network(config['network'])
-memory = deque(maxlen=1_000_000)
+    score_history = []
+    exploration_rate_history = []
 
-environment = gym.make('LunarLander-v2')
-environment.reset()
+    for episode in range(config['number_of_episodes']):
 
-print('State shape: ', environment.observation_space.shape)
-print('Number of actions: ', environment.action_space.n)
+        # collect and train
+        observation = env.reset()
+        for step in range(config['max_steps']):
+            action = agent.choose_action(observation)
+            next_observation, reward, done, info = env.step(action)
+            agent.remember(observation, action, reward, next_observation, done)
+            observation = next_observation
+            agent.learn()
+            if done:
+                continue
 
-for _ in range(num_episodes):
+        # evaluate
+        score = 0
+        observation = env.reset()
+        for step in range(config['max_steps']):
+            env.render()
+            action = agent.choose_action(observation, policy='exploit')
+            next_observation, reward, done, info = env.step(action)
+            observation = next_observation
+            score += reward
+            if done:
+                continue
 
-    state = environment.reset()
+        exploration_rate_history.append(agent.exploration_rate)
+        score_history.append(score)
 
-    for _ in range(200):
-        environment.render()
-        action = environment.action_space.sample()
-        observation, reward, done, unsure = environment.step(action)
-        if done:
-            break
+        average_score = np.mean(score_history[max(0, episode - 10):episode + 1])
+        print(f'Episode: {episode}, Score: {score}, Average Score: {average_score}')
 
-        observation = format_observation(observation)
-        print(observation)
+    # Plot results here :D

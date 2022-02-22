@@ -4,3 +4,4 @@ Box2D
 matplotlib
 gym
 pyglet
+gym[Box2D]
