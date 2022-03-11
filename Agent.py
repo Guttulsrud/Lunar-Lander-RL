@@ -43,6 +43,7 @@ class Agent:
             action = np.argmax(prediction)
         else:
             action = np.random.choice(self.action_space)
+
         return action
 
     def learn(self):
@@ -50,21 +51,21 @@ class Agent:
             # There is not enough training data yet to fill a batch
             return
 
-        state, action, reward, next_state, done = self.memory.sample_buffer(self.batch_size)
+        state, action, reward, next_state, done = self.memory.sample_batch(self.batch_size)
 
         action_values = np.array(self.action_space, dtype=np.int8)
         action_indices = np.dot(action, action_values)
         action_indices = [int(x) for x in action_indices]
 
-        q_next = self.model.predict(next_state)
         q_eval = self.model.predict(state)
+        q_next = self.model.predict(next_state)
+
         q_target = q_eval.copy()
 
-        max_actions = np.argmax(q_eval, axis=1)
         batch_index = np.arange(self.batch_size, dtype=np.int32)
 
-        calculated_rewards = reward + self.config['gamma'] * q_next[batch_index, max_actions.astype(int)] * (1 - done)
-        q_target[batch_index, action_indices] = calculated_rewards
+        gradients = reward + self.config['gamma'] * np.max(q_next, axis=1) * (1 - done)
+        q_target[batch_index, action_indices] = gradients
 
         self.model.fit(state, q_target, verbose=0)
 

@@ -1,7 +1,9 @@
 from Agent import Agent
-from utils import get_config
+from utils import get_config, evaluate_agent
 import gym
-import numpy as np
+import os
+import json
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 if __name__ == '__main__':
 
@@ -9,12 +11,9 @@ if __name__ == '__main__':
     agent = Agent(config)
     env = gym.make('LunarLander-v2')
 
-    score_history = []
-    exploration_rate_history = []
-
     for episode in range(config['number_of_episodes']):
+        print(f'Episode: {episode}. \nCollecting data ...')
 
-        # collect and train
         observation = env.reset()
         for step in range(config['max_steps']):
             action = agent.choose_action(observation)
@@ -23,24 +22,14 @@ if __name__ == '__main__':
             observation = next_observation
             agent.learn()
             if done:
-                continue
+                break
 
-        # evaluate
-        score = 0
-        observation = env.reset()
-        for step in range(config['max_steps']):
-            env.render()
-            action = agent.choose_action(observation, policy='exploit')
-            next_observation, reward, done, info = env.step(action)
-            observation = next_observation
-            score += reward
-            if done:
-                continue
+        avg, scores = evaluate_agent(env, agent, config)
 
-        exploration_rate_history.append(agent.exploration_rate)
-        score_history.append(score)
-
-        average_score = np.mean(score_history[max(0, episode - 10):episode + 1])
-        print(f'Episode: {episode}, Score: {score}, Average Score: {average_score}')
-
-    # Plot results here :D
+        # write results to file
+        with open('results.json', 'r') as f:
+            results = json.load(f)
+            results['results'].append(
+                {'episode': episode, 'average_return': avg, 'episode_scores': scores, })
+        with open('results.json', 'w') as f:
+            json.dump(results, f)
