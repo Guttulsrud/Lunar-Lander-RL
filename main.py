@@ -1,15 +1,14 @@
 from Agent import Agent
 from utils import get_config, evaluate_agent
-import gym
-import os
 import json
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+from custom_lunar_lander import LunarLander
 
 if __name__ == '__main__':
 
     config = get_config()
     agent = Agent(config)
-    env = gym.make('LunarLander-v2')
+    env = LunarLander(config)
 
     for episode in range(config['number_of_episodes']):
         print(f'Episode: {episode}. \nCollecting data ...')
@@ -21,6 +20,7 @@ if __name__ == '__main__':
             agent.remember(observation, action, reward, next_observation, done)
             observation = next_observation
             agent.learn()
+
             if done:
                 break
 
