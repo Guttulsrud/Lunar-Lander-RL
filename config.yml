@@ -1,4 +1,10 @@
 ---
+uncertainty:
+  start_positions_x_range: [0, 550]
+  start_positions_y_range: [200, 400]
+#  start_position: [300, 400]
+  density: hello
+
 network:
   layers:
     - nodes: 64
@@ -12,7 +18,6 @@ network:
   learning_rate: 0.001
   days:
 environment:
-  start_positions: [[200, 350], [325,350], [450, 350]]
   lander:
     engines:
       main_power: 13

@@ -147,7 +147,7 @@ class LunarLander(gym.Env, EzPickle):
     def __init__(self, config, continuous: bool = False):
         EzPickle.__init__(self)
         self.config = config
-        self.spawn_x, self.spawn_y = config['environment']['start_position']
+        self.spawn_x, self.spawn_y = config['uncertainty']['start_position']
         self.screen = None
         self.clock = None
         self.isopen = True
@@ -234,7 +234,6 @@ class LunarLander(gym.Env, EzPickle):
         self.moon.color1 = (0.0, 0.0, 0.0)
         self.moon.color2 = (0.0, 0.0, 0.0)
 
-        # initial_y = VIEWPORT_H / SCALE
         self.lander = self.world.CreateDynamicBody(
             position=(self.spawn_x / SCALE, self.spawn_y / SCALE),
             angle=0.0,
@@ -242,7 +241,7 @@ class LunarLander(gym.Env, EzPickle):
                 shape=polygonShape(
                     vertices=[(x / SCALE, y / SCALE) for x, y in LANDER_POLY]
                 ),
-                density=5.0,
+                density=10.0,
                 friction=0.1,
                 categoryBits=0x0010,
                 maskBits=0x001,  # collide only with ground

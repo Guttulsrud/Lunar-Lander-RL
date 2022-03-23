@@ -1,15 +1,11 @@
 import numpy as np
-from tensorflow.keras.layers import Dense, Input, Conv2D, Flatten, Lambda, Add
-from tensorflow.keras.models import Sequential, Model
-from tensorflow.keras import backend as K
-from tensorflow.keras.optimizers import Adam, RMSprop
+from tensorflow.keras.layers import Dense, Input
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.optimizers import Adam
 from datetime import datetime
 
 from ReplayBuffer import ReplayBuffer
 
-
-
-#TODO: Import cv2 og håndter bilder som i tutorial
 
 class Agent:
     def __init__(self, config):
@@ -21,42 +17,7 @@ class Agent:
         self.memory = ReplayBuffer(config)
         self.action_space = np.arange(self.config['number_of_actions'])
         self.model = None
-        self.build_cnn_model()
-
-    def build_cnn_model(self, dueling=False):
-        input_shape = (400, 600)
-        action_space = self.config['network']['layers'][2]['nodes']
-
-        x_input = Input(input_shape)
-        x = x_input
-        x = Conv2D(64, 5, strides=(3, 3), padding="valid", input_shape=input_shape, activation="relu",
-                   data_format="channels_first")(x)
-        x = Conv2D(64, 4, strides=(2, 2), padding="valid", activation="relu", data_format="channels_first")(x)
-        x = Conv2D(64, 3, strides=(1, 1), padding="valid", activation="relu", data_format="channels_first")(x)
-        x = Flatten()(x)
-        x = Dense(512, input_shape=input_shape, activation="relu", kernel_initializer='he_uniform')(x)
-        x = Dense(256, activation="relu", kernel_initializer='he_uniform')(x)
-        x = Dense(64, activation="relu", kernel_initializer='he_uniform')(x)
-
-        if dueling:
-            state_value = Dense(1, kernel_initializer='he_uniform')(x)
-            state_value = Lambda(lambda s: K.expand_dims(s[:, 0], -1), output_shape=(action_space,))(state_value)
-
-            action_advantage = Dense(s, kernel_initializer='he_uniform')(x)
-            action_advantage = Lambda(lambda a: a[:, :] - K.mean(a[:, :], keepdims=True), output_shape=(action_space,))(
-                action_advantage)
-
-            x = Add()([state_value, action_advantage])
-        else:
-            # Output Layer with # of actions: 2 nodes (left, right)
-            x = Dense(action_space, activation="linear", kernel_initializer='he_uniform')(x)
-
-        model = Model(inputs=x_input, outputs=x, name='CartPole PER D3QN CNN model')
-        model.compile(loss="mean_squared_error", optimizer=RMSprop(lr=0.00025, rho=0.95, epsilon=0.01),
-                      metrics=["accuracy"])
-
-        model.summary()
-        self.model = model
+        self.build_naive_model()
 
     def build_naive_model(self):
         layers = self.config['network']['layers']

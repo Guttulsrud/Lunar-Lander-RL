@@ -12,38 +12,38 @@ if __name__ == '__main__':
     agent = Agent(config)
 
     for episode in range(config['number_of_episodes']):
-        config['environment']['start_position'] = random.choice(config['environment']['start_positions'])
+        if not config['uncertainty'].get('start_position'):
+            x = random.randrange(config['uncertainty']['start_positions_x_range'][0], config['uncertainty']['start_positions_x_range'][1])
+            y = random.randrange(config['uncertainty']['start_positions_y_range'][0], config['uncertainty']['start_positions_y_range'][1])
+            config['uncertainty']['start_position'] = x, y
+
         env = LunarLander(config)
 
         print(f'Episode: {episode}. \nCollecting data ...')
-        env.reset()
-        observation = env.render(mode="rgb_array")
+        observation = env.reset()
 
         for step in range(config['max_steps']):
-            observation = observation[:, :, 0]
-            print(observation.shape)
-
+            env.render()
             action = agent.choose_action(observation)
-            _, reward, done, info = env.step(action)
-            next_observation = env.render(mode="rgb_array")
+            next_observation, reward, done, info = env.step(action)
 
             agent.remember(observation, action, reward, next_observation, done)
             observation = next_observation
-            agent.learn()
+            # agent.learn()
 
             if done:
                 break
 
-        avg, scores = evaluate_agent(env, agent, config)
-
-        # write results to file
-        with open('results.json', 'r') as f:
-            results = json.load(f)
-            results['results'].append(
-                {'episode': episode,
-                 'average_return': avg,
-                 'episode_scores': scores,
-                 'spawn': config['environment']['start_positions']
-                 })
-        with open('results.json', 'w') as f:
-            json.dump(results, f)
+        # avg, scores = evaluate_agent(env, agent, config)
+        #
+        # # write results to file
+        # with open('results.json', 'r') as f:
+        #     results = json.load(f)
+        #     results['results'].append(
+        #         {'episode': episode,
+        #          'average_return': avg,
+        #          'episode_scores': scores,
+        #          'spawn': config['environment']['start_positions']
+        #          })
+        # with open('results.json', 'w') as f:
+        #     json.dump(results, f)
