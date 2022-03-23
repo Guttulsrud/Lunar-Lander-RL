@@ -21,7 +21,7 @@ def format_observation(observation):
 
 
 def get_config():
-    f = open('../config.json')
+    f = open('../config.yml')
     return json.load(f)
 
 def compute_avg_return(environment, policy, num_episodes=10, render=False):

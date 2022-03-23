@@ -1,22 +1,32 @@
+import random
+
 from Agent import Agent
 from utils import get_config, evaluate_agent
-import json
 # os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 from custom_lunar_lander import LunarLander
+import json
 
 if __name__ == '__main__':
 
     config = get_config()
     agent = Agent(config)
-    env = LunarLander(config)
 
     for episode in range(config['number_of_episodes']):
-        print(f'Episode: {episode}. \nCollecting data ...')
+        config['environment']['start_position'] = random.choice(config['environment']['start_positions'])
+        env = LunarLander(config)
 
-        observation = env.reset()
+        print(f'Episode: {episode}. \nCollecting data ...')
+        env.reset()
+        observation = env.render(mode="rgb_array")
+
         for step in range(config['max_steps']):
+            observation = observation[:, :, 0]
+            print(observation.shape)
+
             action = agent.choose_action(observation)
-            next_observation, reward, done, info = env.step(action)
+            _, reward, done, info = env.step(action)
+            next_observation = env.render(mode="rgb_array")
+
             agent.remember(observation, action, reward, next_observation, done)
             observation = next_observation
             agent.learn()
@@ -30,6 +40,10 @@ if __name__ == '__main__':
         with open('results.json', 'r') as f:
             results = json.load(f)
             results['results'].append(
-                {'episode': episode, 'average_return': avg, 'episode_scores': scores, })
+                {'episode': episode,
+                 'average_return': avg,
+                 'episode_scores': scores,
+                 'spawn': config['environment']['start_positions']
+                 })
         with open('results.json', 'w') as f:
             json.dump(results, f)

@@ -39,8 +39,8 @@ LEG_SPRING_TORQUE = 40
 SIDE_ENGINE_HEIGHT = 14.0
 SIDE_ENGINE_AWAY = 12.0
 
-VIEWPORT_W = 1200
-VIEWPORT_H = 800
+VIEWPORT_W = 600
+VIEWPORT_H = 400
 
 
 class ContactDetector(contactListener):
@@ -144,8 +144,10 @@ class LunarLander(gym.Env, EzPickle):
 
     metadata = {"render_modes": ["human", "rgb_array"], "render_fps": FPS}
 
-    def __init__(self, continuous: bool = False):
+    def __init__(self, config, continuous: bool = False):
         EzPickle.__init__(self)
+        self.config = config
+        self.spawn_x, self.spawn_y = config['environment']['start_position']
         self.screen = None
         self.clock = None
         self.isopen = True
@@ -232,9 +234,9 @@ class LunarLander(gym.Env, EzPickle):
         self.moon.color1 = (0.0, 0.0, 0.0)
         self.moon.color2 = (0.0, 0.0, 0.0)
 
-        initial_y = VIEWPORT_H / SCALE
+        # initial_y = VIEWPORT_H / SCALE
         self.lander = self.world.CreateDynamicBody(
-            position=(VIEWPORT_W / SCALE / 2, initial_y),
+            position=(self.spawn_x / SCALE, self.spawn_y / SCALE),
             angle=0.0,
             fixtures=fixtureDef(
                 shape=polygonShape(
@@ -260,7 +262,7 @@ class LunarLander(gym.Env, EzPickle):
         self.legs = []
         for i in [-1, +1]:
             leg = self.world.CreateDynamicBody(
-                position=(VIEWPORT_W / SCALE / 2 - i * LEG_AWAY / SCALE, initial_y),
+                position=(self.spawn_x / SCALE - i * LEG_AWAY / SCALE, self.spawn_y / SCALE),
                 angle=(i * 0.05),
                 fixtures=fixtureDef(
                     shape=polygonShape(box=(LEG_W / SCALE, LEG_H / SCALE)),

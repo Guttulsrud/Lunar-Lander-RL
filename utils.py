@@ -1,5 +1,6 @@
 import numpy as np
-import json
+import yaml
+from yaml.loader import SafeLoader
 
 
 def reverse_one_hot(value, length):
@@ -9,8 +10,9 @@ def reverse_one_hot(value, length):
 
 
 def get_config():
-    f = open('config.json')
-    config = json.load(f)
+    with open('config.yml') as f:
+        config = yaml.load(f, Loader=SafeLoader)
+
     return config
 
 
