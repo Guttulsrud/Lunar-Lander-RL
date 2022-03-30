@@ -151,7 +151,7 @@ class LunarLander(gym.Env, EzPickle):
         self.screen = None
         self.clock = None
         self.isopen = True
-        self.world = Box2D.b2World()
+        self.world = Box2D.b2World() #gravity=(0, config['uncertainty']['gravity']))
         self.moon = None
         self.lander = None
         self.particles = []
