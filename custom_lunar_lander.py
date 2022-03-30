@@ -1,14 +1,12 @@
 __credits__ = ["Andrea PIERRÉ"]
 
 import math
-import sys
 from typing import Optional
 
+import Box2D
+import gym
 import numpy as np
 import pygame
-from pygame import gfxdraw
-
-import Box2D
 from Box2D.b2 import (
     edgeShape,
     circleShape,
@@ -17,16 +15,15 @@ from Box2D.b2 import (
     revoluteJointDef,
     contactListener,
 )
-
-import gym
-from gym import error, spaces
-from gym.utils import seeding, EzPickle
+from gym import spaces
+from gym.utils import EzPickle
+from pygame import gfxdraw
 
 FPS = 50
 SCALE = 30.0  # affects how fast-paced the game is, forces should be adjusted as well
 
-MAIN_ENGINE_POWER = 13
-SIDE_ENGINE_POWER = 0.6
+MAIN_ENGINE_POWER = 26
+SIDE_ENGINE_POWER = 1.2
 
 INITIAL_RANDOM = 1000.0  # Set 1500 to make game harder
 
@@ -145,13 +142,16 @@ class LunarLander(gym.Env, EzPickle):
     metadata = {"render_modes": ["human", "rgb_array"], "render_fps": FPS}
 
     def __init__(self, config, continuous: bool = False):
+        start_position = config['uncertainty']['start_position']
+        gravity = config['uncertainty']['gravity']
+
         EzPickle.__init__(self)
         self.config = config
-        self.spawn_x, self.spawn_y = config['uncertainty']['start_position']
+        self.spawn_x, self.spawn_y = start_position
         self.screen = None
         self.clock = None
         self.isopen = True
-        self.world = Box2D.b2World() #gravity=(0, config['uncertainty']['gravity']))
+        self.world = Box2D.b2World(gravity=(0, gravity))
         self.moon = None
         self.lander = None
         self.particles = []
@@ -241,7 +241,7 @@ class LunarLander(gym.Env, EzPickle):
                 shape=polygonShape(
                     vertices=[(x / SCALE, y / SCALE) for x, y in LANDER_POLY]
                 ),
-                density=10.0,
+                density=5.0,
                 friction=0.1,
                 categoryBits=0x0010,
                 maskBits=0x001,  # collide only with ground
@@ -250,13 +250,13 @@ class LunarLander(gym.Env, EzPickle):
         )
         self.lander.color1 = (128, 102, 230)
         self.lander.color2 = (77, 77, 128)
-        self.lander.ApplyForceToCenter(
-            (
-                self.np_random.uniform(-INITIAL_RANDOM, INITIAL_RANDOM),
-                self.np_random.uniform(-INITIAL_RANDOM, INITIAL_RANDOM),
-            ),
-            True,
-        )
+        # self.lander.ApplyForceToCenter(
+        #     (
+        #         self.np_random.uniform(-INITIAL_RANDOM, INITIAL_RANDOM),
+        #         self.np_random.uniform(-INITIAL_RANDOM, INITIAL_RANDOM),
+        #     ),
+        #     True,
+        # )
 
         self.legs = []
         for i in [-1, +1]:

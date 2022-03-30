@@ -1,6 +1,12 @@
 # Lunar-Lander-RL
-Lunar
 
+## Installation
+
+1. Create and activate new conda environment
+2. Run `conda install swig`
+3. Run `pip install -r requirements.txt`
+3. Run `main.py`
+--------------------
 
 
 ###Observation Space
@@ -38,8 +44,3 @@ Firing the main engine is -0.3 points each frame. Firing the side engine
 is -0.03 points each frame. Solved is 200 points.
 
 
-# Installation
-
-1. Create and activate new conda environment 
-2. Run pip install -r requirements.txt
-3. 

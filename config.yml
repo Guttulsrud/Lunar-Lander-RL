@@ -1,10 +1,13 @@
 ---
+general:
+  save_results: yes
+  render_env: no
 uncertainty:
-  start_positions_x_range: [0, 550]
-  start_positions_y_range: [200, 400]
-#  start_position: [300, 400]
-  density: hello
-
+  start_positions_x_range: [ 0, 550 ]
+  start_positions_y_range: [ 200, 400 ]
+#  start_position: [ 300, 400 ]
+  gravity_range: [ -5, -15]
+#  gravity: -10
 network:
   layers:
     - nodes: 64
@@ -16,29 +19,6 @@ network:
   loss_function: mse
   optimizer: adam
   learning_rate: 0.001
-  days:
-environment:
-  lander:
-    engines:
-      main_power: 13
-      side_power: 0.6
-      side_down: 14
-      side_away: 12
-    color_fill: [ 128, 102, 230 ]
-    color_border: [ 77, 77, 128 ]
-    body_polygon: [ [ -14, 17 ], [ -17, 0 ], [ -17, -10 ], [ 17, -10 ],  [ 17, 0 ], [ 14, 17 ] ]
-    legs:
-      color_fill: [ 128, 102, 230 ]
-      color_border: [ 77, 77, 128 ]
-      away: 20
-      down: 18
-      width: 2
-      height: 8
-      torque: 40
-  viewport: [ 600, 400 ]
-  chunks: 11
-  moon_color_fill: [ 0.0, 0.0, 0.0 ]
-  moon_color_border: [ 0.0, 0.0, 0.0 ]
 training:
   batch_size: 64
   epsilon:

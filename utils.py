@@ -1,6 +1,22 @@
+import json
+
 import numpy as np
 import yaml
 from yaml.loader import SafeLoader
+
+
+def save_results_to_file(episode, avg, scores, config, file_name):
+
+    with open(f'results/{file_name}.json', 'r') as f:
+        results = json.load(f)
+        results['results'].append(
+            {'episode': episode,
+             'average_return': avg,
+             'episode_scores': scores,
+             'uncertainty': config['uncertainty'],
+             })
+    with open(f'results/{file_name}.json', 'w') as f:
+        json.dump(results, f)
 
 
 def reverse_one_hot(value, length):
