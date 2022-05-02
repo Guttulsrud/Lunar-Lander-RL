@@ -2,6 +2,9 @@ import json
 import os
 from random import randrange
 from datetime import datetime
+
+import numpy as np
+
 from Agent import Agent
 from utils import get_config, evaluate_agent
 # os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
@@ -41,7 +44,9 @@ class Handler:
             gravity_low = self.config['uncertainty']['gravity_range'][1]
             gravity_high = self.config['uncertainty']['gravity_range'][0]
 
-            self.config['uncertainty']['gravity'] = randrange(gravity_low, gravity_high)
+            gravity = randrange(gravity_low, gravity_high)
+            print(gravity)
+            self.config['uncertainty']['gravity'] = gravity
 
     def evaluate(self, episode):
         self.reload_config()
@@ -57,20 +62,26 @@ class Handler:
         self.environment = LunarLander(self.config)
 
         print(f'Episode: {episode}.')
-        observation = self.environment.reset()
+        current_observation = self.environment.reset()
+        previous_observation = current_observation
 
         for step in range(self.config['max_steps']):
             if self.config['general']['render_env']:
                 self.environment.render()
 
-            action = self.agent.choose_action(observation)
-            next_observation, reward, done, info = self.environment.step(action)
+            previous_and_current_observation = np.append(previous_observation, current_observation)
+            action = self.agent.choose_action(previous_and_current_observation)
 
-            self.agent.remember(observation, action, reward, next_observation, done)
-            observation = next_observation
+            next_observation, reward, done, info = self.environment.step(action)
+            current_and_next_observation = np.append(current_observation, next_observation)
+
+            self.agent.remember(previous_and_current_observation, action, reward, current_and_next_observation, done)
+            previous_observation = current_observation
+            current_observation = next_observation
+
             self.agent.learn()
 
-            if terminate_episode(observation, done):
+            if terminate_episode(current_observation, done):
                 break
 
         self.evaluate(episode)

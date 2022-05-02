@@ -38,18 +38,26 @@ def evaluate_agent(environment, agent, config, render=False, verbose=True, ):
         print('Evaluating ...')
     for episode in range(config['evaluation_episodes']):
 
-        observation = environment.reset()
+        current_observation = environment.reset()
+        previous_observation = current_observation
+
         score = 0.0
 
         for step in range(config['max_steps']):
-            action = agent.choose_action(observation, policy='exploit')
+
+            previous_and_current_observation = np.append(previous_observation, current_observation)
+            action = agent.choose_action(previous_and_current_observation, policy='exploit')
+
             next_observation, reward, done, info = environment.step(action)
+
+            previous_observation = current_observation
+            current_observation = next_observation
+
             score += reward
-            observation = next_observation
             if render:
                 environment.render()
 
-            if done or observation[1] > 2.0:
+            if done or current_observation[1] > 2.0:
                 break
 
         if verbose:

@@ -25,7 +25,7 @@ class Agent:
         loss_function = self.config['network']['loss_function']
         self.model = Sequential()
 
-        self.model.add(Input(shape=(8,)))
+        self.model.add(Input(shape=(self.config['input_dimensions'],)))
 
         for layer in layers:
             self.model.add(Dense(layer['nodes'], activation=layer['activation']))

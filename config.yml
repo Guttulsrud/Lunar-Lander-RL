@@ -1,7 +1,7 @@
 ---
 general:
   save_results: yes
-  render_env: no
+  render_env: yes
 uncertainty:
   start_positions_x_range: [ 0, 550 ]
   start_positions_y_range: [ 200, 400 ]
@@ -27,7 +27,7 @@ training:
     change: 1
 number_of_episodes: 10000
 max_steps: 300
-input_dimensions: 8
+input_dimensions: 16
 number_of_actions: 4
 gamma: 0.99
 save_location: models/
