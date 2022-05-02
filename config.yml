@@ -5,9 +5,9 @@ general:
 uncertainty:
   start_positions_x_range: [ 0, 550 ]
   start_positions_y_range: [ 200, 400 ]
-#  start_position: [ 300, 400 ]
+  start_position: [ 300, 400 ]
   gravity_range: [ -5, -15]
-#  gravity: -10
+  gravity: -10
 network:
   layers:
     - nodes: 64

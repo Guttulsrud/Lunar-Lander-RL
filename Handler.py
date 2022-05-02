@@ -88,6 +88,12 @@ class Handler:
             json.dump(results, f)
 
     def create_result_file(self):
+
+        is_dir = os.path.isdir('results')
+
+        if not is_dir:
+            os.mkdir('results')
+
         with open(f'results/{self.created_at}.json', 'w') as f:
             json.dump({'results': [], 'config': self.config}, f)
 
