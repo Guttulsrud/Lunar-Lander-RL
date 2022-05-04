@@ -9,11 +9,15 @@ from custom_lunar_lander import LunarLander
 
 
 class Handler:
-    def __init__(self):
+    def __init__(self, dev_note, pre_trained_model=None):
         self.config = get_config()
-        self.agent = Agent(self.config)
+        self.dev_note = dev_note + str(self.config['number_of_episodes'])
+
+        self.agent = Agent(config=self.config, pre_trained_model=pre_trained_model)
+
         self.created_at = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
         self.environment = None
+        self.best_score_threshold = self.config['best_score_threshold']
 
         if self.config['general']['save_results']:
             self.create_result_file()
@@ -45,7 +49,22 @@ class Handler:
 
     def evaluate(self, episode):
         self.reload_config()
-        avg, scores = evaluate_agent(self.environment, self.agent, self.config)
+        # self.determine_uncertainties()
+        self.config['uncertainty']['gravity'] = -5
+        self.environment = LunarLander(self.config)
+        avg1, scores1 = evaluate_agent(self.environment, self.agent, self.config)
+
+        self.reload_config()
+        self.config['uncertainty']['gravity'] = -15
+        self.environment = LunarLander(self.config)
+        avg2, scores2 = evaluate_agent(self.environment, self.agent, self.config)
+
+        avg = (avg1 + avg2) / 2
+        scores = scores1 + scores2
+
+        if avg > self.best_score_threshold:
+            self.best_score_threshold = avg
+            self.agent.save_model(score=avg)
 
         if self.config['general']['save_results']:
             self.save_results_to_file(episode=episode, avg=avg, scores=scores)
@@ -70,36 +89,39 @@ class Handler:
             observation = next_observation
             self.agent.learn()
 
-            if terminate_episode(observation, done):
+            if done:
                 break
+            # if terminate_episode(observation, done):
+            #     break
 
         self.evaluate(episode)
 
     def save_results_to_file(self, episode, avg, scores):
-        with open(f'results/{self.created_at}.json', 'r') as f:
+        with open(f'../results/{self.created_at}.json', 'r') as f:
             results = json.load(f)
             results['results'].append(
-                {'episode': episode,
-                 'average_return': avg,
-                 'episode_scores': scores,
-                 'uncertainty': self.config['uncertainty'],
-                 })
-        with open(f'results/{self.created_at}.json', 'w') as f:
+                {
+                    'episode': episode,
+                    'average_return': avg,
+                    'episode_scores': scores,
+                    'uncertainty': self.config['uncertainty'],
+                })
+        with open(f'../results/{self.created_at}.json', 'w') as f:
             json.dump(results, f)
 
     def create_result_file(self):
 
-        is_dir = os.path.isdir('results')
+        is_dir = os.path.isdir('../results')
 
         if not is_dir:
-            os.mkdir('results')
+            os.mkdir('../results')
 
-        with open(f'results/{self.created_at}.json', 'w') as f:
-            json.dump({'results': [], 'config': self.config}, f)
+        with open(f'../results/{self.created_at}.json', 'w') as f:
+            json.dump({'note': self.dev_note, 'results': [], 'config': self.config}, f)
 
 
 def terminate_episode(observation, done):
     x = observation[0]
     y = observation[1]
-    if done or y > 2 or x < -1 or x > 1:
+    if done:
         return True

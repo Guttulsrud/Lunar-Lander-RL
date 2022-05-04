@@ -1,0 +1,2795 @@
+{
+  "note": "Naive. No uncertainty. Iterations: 100",
+  "results": [
+    {
+      "episode": 0,
+      "average_return": -152.18607489447695,
+      "episode_scores": [
+        -141.8159052037853,
+        -162.5562445851686
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 1,
+      "average_return": -281.4263372900313,
+      "episode_scores": [
+        -235.8611300464014,
+        -326.9915445336612
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 2,
+      "average_return": 27.576321608823548,
+      "episode_scores": [
+        260.5099382998151,
+        -205.35729508216798
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 3,
+      "average_return": -638.9648395537977,
+      "episode_scores": [
+        -548.341966562544,
+        -729.5877125450514
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 4,
+      "average_return": -139.03470408613634,
+      "episode_scores": [
+        25.943282849240262,
+        -304.0126910215129
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 5,
+      "average_return": -413.0633420378612,
+      "episode_scores": [
+        -478.0726753483385,
+        -348.0540087273839
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 6,
+      "average_return": -212.55934578387433,
+      "episode_scores": [
+        -317.37193388831236,
+        -107.74675767943629
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 7,
+      "average_return": -220.53898346191653,
+      "episode_scores": [
+        -253.81829912900807,
+        -187.25966779482502
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 8,
+      "average_return": -31.914017821643483,
+      "episode_scores": [
+        -262.0641900989476,
+        198.23615445566065
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 9,
+      "average_return": -342.89911779288707,
+      "episode_scores": [
+        -412.66189841525636,
+        -273.1363371705177
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 10,
+      "average_return": -237.23097047083115,
+      "episode_scores": [
+        -260.83538068623733,
+        -213.62656025542498
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 11,
+      "average_return": -148.20043699500803,
+      "episode_scores": [
+        -130.70704531890883,
+        -165.69382867110724
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 12,
+      "average_return": -151.99623654523086,
+      "episode_scores": [
+        -176.69369937733302,
+        -127.29877371312871
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 13,
+      "average_return": -155.97266814197795,
+      "episode_scores": [
+        -208.6088570960777,
+        -103.33647918787817
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 14,
+      "average_return": 59.76695221264552,
+      "episode_scores": [
+        -2.214797862437583,
+        121.74870228772862
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 15,
+      "average_return": 162.7666395093605,
+      "episode_scores": [
+        254.3676933567067,
+        71.1655856620143
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 16,
+      "average_return": 79.8849335815776,
+      "episode_scores": [
+        52.58056565393785,
+        107.18930150921733
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 17,
+      "average_return": -28.085584729694943,
+      "episode_scores": [
+        89.58515171511567,
+        -145.75632117450556
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 18,
+      "average_return": -9.534324355214999,
+      "episode_scores": [
+        -137.44926400454113,
+        118.38061529411114
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 19,
+      "average_return": 17.133168098878105,
+      "episode_scores": [
+        45.06658871756107,
+        -10.800252519804857
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 20,
+      "average_return": -31.390780060823367,
+      "episode_scores": [
+        17.595384596049357,
+        -80.37694471769609
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 21,
+      "average_return": 78.96735105398272,
+      "episode_scores": [
+        -124.07649490382789,
+        282.01119701179334
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 22,
+      "average_return": -221.6348398336407,
+      "episode_scores": [
+        -248.38101515344977,
+        -194.88866451383166
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 23,
+      "average_return": 37.16317225992708,
+      "episode_scores": [
+        61.54199495959532,
+        12.784349560258832
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 24,
+      "average_return": -198.00255475250017,
+      "episode_scores": [
+        -202.52212222848573,
+        -193.48298727651462
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 25,
+      "average_return": 157.87414035907761,
+      "episode_scores": [
+        184.06667006077893,
+        131.68161065737627
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 26,
+      "average_return": -224.38246574497975,
+      "episode_scores": [
+        -207.94593578213497,
+        -240.81899570782457
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 27,
+      "average_return": -192.11252839478334,
+      "episode_scores": [
+        -195.01442843708344,
+        -189.21062835248324
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 28,
+      "average_return": 49.809532385644246,
+      "episode_scores": [
+        66.03598383972182,
+        33.58308093156667
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 29,
+      "average_return": -200.68882320429992,
+      "episode_scores": [
+        -209.92985737251155,
+        -191.4477890360883
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 30,
+      "average_return": 55.61185953382149,
+      "episode_scores": [
+        23.130315803358748,
+        88.09340326428423
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 31,
+      "average_return": 111.65773700722599,
+      "episode_scores": [
+        100.10773615272012,
+        123.20773786173186
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 32,
+      "average_return": 107.95770914808139,
+      "episode_scores": [
+        139.82369002733455,
+        76.09172826882822
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 33,
+      "average_return": 163.18641645536349,
+      "episode_scores": [
+        231.39752997444853,
+        94.97530293627847
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 34,
+      "average_return": 129.84946929743404,
+      "episode_scores": [
+        8.342211744311427,
+        251.35672685055664
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 35,
+      "average_return": 285.1753659789192,
+      "episode_scores": [
+        285.61193542919904,
+        284.73879652863945
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 36,
+      "average_return": 56.03113084305528,
+      "episode_scores": [
+        32.92312845408481,
+        79.13913323202574
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 37,
+      "average_return": 120.34795152843739,
+      "episode_scores": [
+        -8.39660725879946,
+        249.09251031567425
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 38,
+      "average_return": 247.95672424471894,
+      "episode_scores": [
+        239.09256307789516,
+        256.82088541154275
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 39,
+      "average_return": 89.7837652909082,
+      "episode_scores": [
+        75.44632659137487,
+        104.12120399044153
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 40,
+      "average_return": 38.38066656131711,
+      "episode_scores": [
+        149.36153477908965,
+        -72.60020165645543
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 41,
+      "average_return": -38.380975623325575,
+      "episode_scores": [
+        -13.539598427807462,
+        -63.22235281884369
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 42,
+      "average_return": 220.97631582590014,
+      "episode_scores": [
+        223.02556519804523,
+        218.92706645375506
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 43,
+      "average_return": 270.75331236548874,
+      "episode_scores": [
+        251.0145761518389,
+        290.49204857913855
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 44,
+      "average_return": 242.72326384438213,
+      "episode_scores": [
+        246.77165229683177,
+        238.67487539193246
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 45,
+      "average_return": -37.323585693364464,
+      "episode_scores": [
+        18.722740276997534,
+        -93.36991166372646
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 46,
+      "average_return": 25.37720286726863,
+      "episode_scores": [
+        -19.334189235723585,
+        70.08859497026084
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 47,
+      "average_return": 258.04894985785916,
+      "episode_scores": [
+        272.9497985223926,
+        243.14810119332572
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 48,
+      "average_return": 224.6157238254371,
+      "episode_scores": [
+        167.9142947519639,
+        281.3171528989103
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 49,
+      "average_return": 204.64715384280683,
+      "episode_scores": [
+        163.55802625796866,
+        245.736281427645
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 50,
+      "average_return": 98.2591492416609,
+      "episode_scores": [
+        208.94891282668758,
+        -12.43061434336579
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 51,
+      "average_return": 156.26675556592247,
+      "episode_scores": [
+        48.74980794656858,
+        263.78370318527635
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 52,
+      "average_return": -236.45002574346552,
+      "episode_scores": [
+        -227.98043026334415,
+        -244.9196212235869
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 53,
+      "average_return": 136.4879790512726,
+      "episode_scores": [
+        290.45309767939466,
+        -17.477139576849453
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 54,
+      "average_return": -216.85727304193017,
+      "episode_scores": [
+        -72.3742781953529,
+        -361.34026788850747
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 55,
+      "average_return": 5.672163451864439,
+      "episode_scores": [
+        -26.6761248012849,
+        38.02045170501378
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 56,
+      "average_return": 281.4836459465772,
+      "episode_scores": [
+        256.89775097375457,
+        306.0695409193998
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 57,
+      "average_return": 159.63157426466677,
+      "episode_scores": [
+        123.4032341740844,
+        195.85991435524912
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 58,
+      "average_return": 57.690098703265406,
+      "episode_scores": [
+        -118.97209752790704,
+        234.35229493443785
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 59,
+      "average_return": 44.16416784582568,
+      "episode_scores": [
+        -17.27480569708672,
+        105.60314138873808
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 60,
+      "average_return": 92.43853780064536,
+      "episode_scores": [
+        114.67608881459802,
+        70.20098678669271
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 61,
+      "average_return": 251.84982899160437,
+      "episode_scores": [
+        284.2524054351304,
+        219.44725254807832
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 62,
+      "average_return": 135.66121762581685,
+      "episode_scores": [
+        20.28299030769041,
+        251.0394449439433
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 63,
+      "average_return": 29.520951451509745,
+      "episode_scores": [
+        249.1914554103991,
+        -190.1495525073796
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 64,
+      "average_return": -235.21418668379627,
+      "episode_scores": [
+        -482.438511727486,
+        12.01013835989346
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 65,
+      "average_return": -153.6508402223236,
+      "episode_scores": [
+        -147.05781449537312,
+        -160.2438659492741
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 66,
+      "average_return": -18.640961597045873,
+      "episode_scores": [
+        -33.41637577199775,
+        -3.865547422093993
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 67,
+      "average_return": -5.811958237803477,
+      "episode_scores": [
+        -32.05712423694058,
+        20.433207761333627
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 68,
+      "average_return": -34.081775633557605,
+      "episode_scores": [
+        4.493015642888249,
+        -72.65656691000346
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 69,
+      "average_return": 10.590244573688679,
+      "episode_scores": [
+        239.43837424868494,
+        -218.25788510130758
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 70,
+      "average_return": 88.5105560584334,
+      "episode_scores": [
+        80.85002511235638,
+        96.17108700451041
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 71,
+      "average_return": 226.08533081635477,
+      "episode_scores": [
+        276.0669482971659,
+        176.1037133355437
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 72,
+      "average_return": 146.14435509879667,
+      "episode_scores": [
+        66.3142194443074,
+        225.97449075328595
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 73,
+      "average_return": -15.971780378169129,
+      "episode_scores": [
+        -234.31241506669724,
+        202.36885431035898
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 74,
+      "average_return": 2.7592403691765455,
+      "episode_scores": [
+        -92.89897590076589,
+        98.41745663911898
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 75,
+      "average_return": 87.02466116947414,
+      "episode_scores": [
+        29.405789618918785,
+        144.6435327200295
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 76,
+      "average_return": 219.51022574206615,
+      "episode_scores": [
+        149.5271002816776,
+        289.49335120245473
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 77,
+      "average_return": -69.66979876552084,
+      "episode_scores": [
+        65.29683993347999,
+        -204.63643746452166
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 78,
+      "average_return": 189.28828757155674,
+      "episode_scores": [
+        156.54845570572283,
+        222.02811943739067
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 79,
+      "average_return": -387.27011693727883,
+      "episode_scores": [
+        -249.17990791461136,
+        -525.3603259599463
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 80,
+      "average_return": 157.49192385833956,
+      "episode_scores": [
+        199.19721765010354,
+        115.78663006657558
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 81,
+      "average_return": -94.09439324618093,
+      "episode_scores": [
+        -201.104047728634,
+        12.91526123627213
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 82,
+      "average_return": 265.96345395884157,
+      "episode_scores": [
+        297.0964199063241,
+        234.83048801135905
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 83,
+      "average_return": -228.01401718343766,
+      "episode_scores": [
+        -230.35351328616332,
+        -225.674521080712
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 84,
+      "average_return": 34.15964948855357,
+      "episode_scores": [
+        -164.81126888496692,
+        233.13056786207406
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 85,
+      "average_return": 55.84789318549972,
+      "episode_scores": [
+        -15.45326635562158,
+        127.14905272662102
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 86,
+      "average_return": 234.57209660545357,
+      "episode_scores": [
+        243.46007732651051,
+        225.68411588439662
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 87,
+      "average_return": 190.55369278929953,
+      "episode_scores": [
+        111.14838490030152,
+        269.95900067829757
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 88,
+      "average_return": 210.90676887203003,
+      "episode_scores": [
+        177.5186740809918,
+        244.29486366306827
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 89,
+      "average_return": 77.91779977059643,
+      "episode_scores": [
+        -78.02704870909082,
+        233.86264825028368
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 90,
+      "average_return": 225.31166261741964,
+      "episode_scores": [
+        176.70134968027213,
+        273.92197555456715
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 91,
+      "average_return": 165.41715008234712,
+      "episode_scores": [
+        239.31864663151154,
+        91.51565353318273
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 92,
+      "average_return": 127.70979054969858,
+      "episode_scores": [
+        250.50969918777275,
+        4.909881911624418
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 93,
+      "average_return": 218.02076610059657,
+      "episode_scores": [
+        122.78457288229012,
+        313.256959318903
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 94,
+      "average_return": 138.68777050364778,
+      "episode_scores": [
+        143.11854704408063,
+        134.25699396321494
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 95,
+      "average_return": -146.36218081381335,
+      "episode_scores": [
+        -151.17921322238016,
+        -141.54514840524655
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 96,
+      "average_return": 222.17528500793844,
+      "episode_scores": [
+        253.5708278943173,
+        190.7797421215596
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 97,
+      "average_return": 222.5449586276368,
+      "episode_scores": [
+        194.36678004290692,
+        250.72313721236665
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 98,
+      "average_return": -179.7732617403999,
+      "episode_scores": [
+        -191.37589982151053,
+        -168.17062365928925
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 99,
+      "average_return": 280.8286150208347,
+      "episode_scores": [
+        282.06877131916673,
+        279.58845872250276
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    },
+    {
+      "episode": 100,
+      "average_return": -118.42643871805659,
+      "episode_scores": [
+        -57.80723452734369,
+        -179.04564290876948
+      ],
+      "uncertainty": {
+        "start_positions_x_range": [
+          0,
+          550
+        ],
+        "start_positions_y_range": [
+          200,
+          400
+        ],
+        "start_position": [
+          300,
+          400
+        ],
+        "gravity_range": [
+          -5,
+          -15
+        ],
+        "gravity": -10
+      }
+    }
+  ],
+  "config": {
+    "general": {
+      "save_results": true,
+      "render_env": false
+    },
+    "uncertainty": {
+      "start_positions_x_range": [
+        0,
+        550
+      ],
+      "start_positions_y_range": [
+        200,
+        400
+      ],
+      "start_position": [
+        300,
+        400
+      ],
+      "gravity_range": [
+        -5,
+        -15
+      ],
+      "gravity": -10
+    },
+    "network": {
+      "layers": [
+        {
+          "nodes": 64,
+          "activation": "relu"
+        },
+        {
+          "nodes": 64,
+          "activation": "relu"
+        },
+        {
+          "nodes": 4,
+          "activation": "linear"
+        }
+      ],
+      "loss_function": "mse",
+      "optimizer": "adam",
+      "learning_rate": 0.001
+    },
+    "training": {
+      "batch_size": 64,
+      "epsilon": {
+        "min": 0.01,
+        "max": 0.2,
+        "change": 1
+      }
+    },
+    "number_of_episodes": 150,
+    "max_steps": 1000,
+    "input_dimensions": 8,
+    "number_of_actions": 4,
+    "gamma": 0.99,
+    "save_location": "../models/",
+    "memory": {
+      "size": 1000000
+    },
+    "evaluation_episodes": 2,
+    "best_score_threshold": 20
+  }
+}

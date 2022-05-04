@@ -7,7 +7,7 @@ uncertainty:
   start_positions_y_range: [ 200, 400 ]
   start_position: [ 300, 400 ]
   gravity_range: [ -5, -15]
-  gravity: -10
+#  gravity: -10
 network:
   layers:
     - nodes: 64
@@ -25,12 +25,13 @@ training:
     min: 0.01
     max: 0.2
     change: 1
-number_of_episodes: 10000
-max_steps: 300
+number_of_episodes: 100
+max_steps: 1000
 input_dimensions: 8
 number_of_actions: 4
 gamma: 0.99
-save_location: models/
+save_location: ../models/
 memory:
   size: 1000000
 evaluation_episodes: 1
+best_score_threshold: 20

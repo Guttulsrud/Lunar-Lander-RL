@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 from tensorflow.keras.layers import Dense, Input
 from tensorflow.keras.models import Sequential
@@ -8,7 +10,7 @@ from ReplayBuffer import ReplayBuffer
 
 
 class Agent:
-    def __init__(self, config):
+    def __init__(self, config, pre_trained_model):
         self.config = config
         self.exploration_rate = config['training']['epsilon']['max']
         self.exploration_rate_min = config['training']['epsilon']['min']
@@ -16,8 +18,10 @@ class Agent:
         self.batch_size = self.config['training']['batch_size']
         self.memory = ReplayBuffer(config)
         self.action_space = np.arange(self.config['number_of_actions'])
-        self.model = None
-        self.build_naive_model()
+        if not pre_trained_model:
+            self.build_naive_model()
+        else:
+            self.model = pre_trained_model
 
     def build_naive_model(self):
         layers = self.config['network']['layers']
@@ -72,10 +76,17 @@ class Agent:
         if self.exploration_rate > self.exploration_rate_min:
             self.exploration_rate *= self.exploration_rate_decrement
 
-    def save_model(self):
-        model_name = datetime.now().isoformat()
-        model_name = model_name[:-7]
-        model_name = model_name.replace('T', '_')
-        model_name = model_name.replace(':', '-')
+    def save_model(self, score):
+        now = datetime.now()
+        model_name = now.strftime("%y-%m-%d_%H-%M")
+        model_name = f'{model_name}_SCORE_{str(score).split(".")[0]}'
+        is_dir = os.path.isdir(self.config['save_location'])
+
+        if not is_dir:
+            os.mkdir(self.config['save_location'])
 
         self.model.save(self.config['save_location'] + model_name)
+
+
+
+
