@@ -250,13 +250,13 @@ class LunarLander(gym.Env, EzPickle):
         )
         self.lander.color1 = (128, 102, 230)
         self.lander.color2 = (77, 77, 128)
-        # self.lander.ApplyForceToCenter(
-        #     (
-        #         self.np_random.uniform(-INITIAL_RANDOM, INITIAL_RANDOM),
-        #         self.np_random.uniform(-INITIAL_RANDOM, INITIAL_RANDOM),
-        #     ),
-        #     True,
-        # )
+        self.lander.ApplyForceToCenter(
+            (
+                self.np_random.uniform(-INITIAL_RANDOM, INITIAL_RANDOM),
+                self.np_random.uniform(-INITIAL_RANDOM, INITIAL_RANDOM),
+            ),
+            True,
+        )
 
         self.legs = []
         for i in [-1, +1]:

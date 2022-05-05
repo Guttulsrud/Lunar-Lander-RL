@@ -1,7 +1,7 @@
 ---
 general:
   save_results: yes
-  render_env: yes
+  render_env: no
 uncertainty:
   start_positions_x_range: [ 0, 550 ]
   start_positions_y_range: [ 200, 400 ]
@@ -25,12 +25,13 @@ training:
     min: 0.01
     max: 0.2
     change: 1
-number_of_episodes: 10000
-max_steps: 300
+number_of_episodes: 100
+max_steps: 1000
 input_dimensions: 16
 number_of_actions: 4
 gamma: 0.99
-save_location: models/
+save_location: ../models/
 memory:
   size: 1000000
 evaluation_episodes: 1
+best_score_threshold: 20

@@ -3,11 +3,11 @@ import json
 import numpy as np
 import yaml
 from yaml.loader import SafeLoader
+import tensorflow as tf
 
 
 def save_results_to_file(episode, avg, scores, config, file_name):
-
-    with open(f'results/{file_name}.json', 'r') as f:
+    with open(f'../results/{file_name}.json', 'r') as f:
         results = json.load(f)
         results['results'].append(
             {'episode': episode,
@@ -15,7 +15,7 @@ def save_results_to_file(episode, avg, scores, config, file_name):
              'episode_scores': scores,
              'uncertainty': config['uncertainty'],
              })
-    with open(f'results/{file_name}.json', 'w') as f:
+    with open(f'../results/{file_name}.json', 'w') as f:
         json.dump(results, f)
 
 
@@ -25,8 +25,14 @@ def reverse_one_hot(value, length):
     return output
 
 
+def load_model(path):
+    path = f'../models/{path}'
+
+    return tf.keras.models.load_model(path)
+
+
 def get_config():
-    with open('config.yml') as f:
+    with open('../config.yml') as f:
         config = yaml.load(f, Loader=SafeLoader)
 
     return config
@@ -57,7 +63,7 @@ def evaluate_agent(environment, agent, config, render=False, verbose=True, ):
             if render:
                 environment.render()
 
-            if done or current_observation[1] > 2.0:
+            if done:
                 break
 
         if verbose:

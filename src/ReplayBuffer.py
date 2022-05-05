@@ -6,7 +6,7 @@ from utils import reverse_one_hot
 class ReplayBuffer:
     def __init__(self, config):
         self.memory_size = config['memory']['size']
-        self.observation_shape = 16
+        self.input_dimensions = config['input_dimensions']
         self.number_of_actions = config['number_of_actions']
         self.memory_counter = 0
 
