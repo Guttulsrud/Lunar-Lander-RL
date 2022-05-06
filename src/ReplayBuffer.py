@@ -10,8 +10,8 @@ class ReplayBuffer:
         self.number_of_actions = config['number_of_actions']
         self.memory_counter = 0
 
-        self.state_memory = np.zeros((self.memory_size, self.observation_shape))
-        self.next_state_memory = np.zeros((self.memory_size, self.observation_shape))
+        self.state_memory = np.zeros((self.memory_size, self.input_dimensions))
+        self.next_state_memory = np.zeros((self.memory_size, self.input_dimensions))
         self.action_memory = np.zeros((self.memory_size, self.number_of_actions))
         self.reward_memory = np.zeros(self.memory_size)
         self.done_memory = np.zeros(self.memory_size)

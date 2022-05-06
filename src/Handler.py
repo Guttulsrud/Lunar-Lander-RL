@@ -2,7 +2,7 @@ import json
 import os
 from random import randrange
 from datetime import datetime
-
+import requests
 import numpy as np
 
 from Agent import Agent
@@ -11,6 +11,7 @@ from utils import get_config, evaluate_agent
 from custom_lunar_lander import LunarLander
 
 
+# todo: Get better name for this
 class Handler:
     def __init__(self, dev_note, pre_trained_model=None):
         self.config = get_config()
@@ -21,7 +22,7 @@ class Handler:
         self.created_at = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
         self.environment = None
         self.best_score_threshold = self.config['best_score_threshold']
-
+        self.best_score = -30_000
         if self.config['general']['save_results']:
             self.create_result_file()
 
@@ -50,24 +51,40 @@ class Handler:
 
             self.config['uncertainty']['gravity'] = randrange(gravity_low, gravity_high)
 
+    def simulate(self, gravity_range=-5):
+        print(gravity_range)
+        if gravity_range == 1:
+            gravity_max = -15
+        else:
+            gravity_max = -20
+        avg_total = []
+        scores_total = []
+        gravity = range(-5, gravity_max, gravity_range)
+        length = len(gravity)
+        for progress, gravity in enumerate(gravity):
+            self.config['uncertainty']['gravity'] = gravity
+
+            self.environment = LunarLander(self.config)
+            avg, scores = evaluate_agent(self.environment, self.agent, self.config, progress + 1, length, render=True)
+            avg_total.append(avg)
+            scores_total += scores
+
+        avg = np.mean(avg_total)
+        scores = np.mean(scores_total)
+        return avg, scores
+
     def evaluate(self, episode):
+
         self.reload_config()
         # self.determine_uncertainties()
-        self.config['uncertainty']['gravity'] = -5
-        self.environment = LunarLander(self.config)
-        avg1, scores1 = evaluate_agent(self.environment, self.agent, self.config)
+        avg, scores = self.simulate()
+        print('Average: ', avg)
 
-        self.reload_config()
-        self.config['uncertainty']['gravity'] = -15
-        self.environment = LunarLander(self.config)
-        avg2, scores2 = evaluate_agent(self.environment, self.agent, self.config)
-
-        avg = (avg1 + avg2) / 2
-        scores = scores1 + scores2
-
-        if avg > self.best_score_threshold:
-            self.best_score_threshold = avg
+        if avg > self.best_score:
+            print('New best model!')
+            self.best_score = avg
             self.agent.save_model(score=avg)
+            self.simulate(gravity_range=-1)
 
         if self.config['general']['save_results']:
             self.save_results_to_file(episode=episode, avg=avg, scores=scores)
@@ -83,8 +100,8 @@ class Handler:
         previous_observation = current_observation
 
         for step in range(self.config['max_steps']):
-            if self.config['general']['render_env']:
-                self.environment.render()
+            # if self.config['general']['render_env']:
+            #     self.environment.render()
 
             previous_and_current_observation = np.append(previous_observation, current_observation)
             action = self.agent.choose_action(previous_and_current_observation)
@@ -115,6 +132,8 @@ class Handler:
                 })
         with open(f'../results/{self.created_at}.json', 'w') as f:
             json.dump(results, f)
+
+        requests.post('http://localhost:5000/send', json={"data": avg, "title": self.dev_note})
 
     def create_result_file(self):
 

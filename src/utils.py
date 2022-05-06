@@ -38,10 +38,10 @@ def get_config():
     return config
 
 
-def evaluate_agent(environment, agent, config, render=False, verbose=True, ):
+def evaluate_agent(environment, agent, config, progress, length, render=False, verbose=True, ):
     episode_scores = []
     if verbose:
-        print('Evaluating ...')
+        print(f'Evaluating {progress}/{length}')
     for episode in range(config['evaluation_episodes']):
 
         current_observation = environment.reset()
@@ -68,7 +68,7 @@ def evaluate_agent(environment, agent, config, render=False, verbose=True, ):
 
         if verbose:
             print('Reward: ', score)
-
+        environment.close()
         episode_scores.append(score)
 
     average_return = sum(episode_scores) / config['evaluation_episodes']

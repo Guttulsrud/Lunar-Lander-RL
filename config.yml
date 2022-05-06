@@ -1,18 +1,18 @@
 ---
 general:
   save_results: yes
-  render_env: no
+  render_env: yes
 uncertainty:
   start_positions_x_range: [ 0, 550 ]
   start_positions_y_range: [ 200, 400 ]
-#  start_position: [ 300, 400 ]
+  start_position: [ 300, 400 ]
   gravity_range: [ -5, -15]
 #  gravity: -10
 network:
   layers:
-    - nodes: 64
+    - nodes: 128
       activation: relu
-    - nodes: 64
+    - nodes: 128
       activation: relu
     - nodes: 4
       activation: linear
@@ -26,7 +26,7 @@ training:
     max: 0.2
     change: 1
 number_of_episodes: 100
-max_steps: 1000
+max_steps: 200
 input_dimensions: 16
 number_of_actions: 4
 gamma: 0.99

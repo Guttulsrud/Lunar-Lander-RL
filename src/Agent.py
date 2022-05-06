@@ -79,7 +79,9 @@ class Agent:
     def save_model(self, score):
         now = datetime.now()
         model_name = now.strftime("%y-%m-%d_%H-%M")
-        model_name = f'{model_name}_SCORE_{str(score).split(".")[0]}'
+
+        score = str(score).split(".")[0]
+        model_name = f'{model_name}_SCORE_{score}'
         is_dir = os.path.isdir(self.config['save_location'])
 
         if not is_dir:
