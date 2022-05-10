@@ -1,9 +1,27 @@
 <template>
-  <div id="app">
+  <v-app>
+    <v-container fluid class="grey lighten-3" style="min-height: 100rem">
+      <v-container>
+        <v-card class="white pa-12">
+          <h1 class="text-center">Training model: {{ title }}</h1>
 
-    <h1>{{ title }}</h1>
-    <VueApexCharts width="600" type="line" :options="options" :series="series"></VueApexCharts>
-  </div>
+          <v-row class="mt-12">
+            <v-col cols="6" class="pa-12">
+              <h2>Score per episode</h2>
+              <VueApexCharts type="line" :options="options" :series="series"></VueApexCharts>
+
+            </v-col>
+            <v-col cols="6" class="pa-12">
+              <h2>All evaluations</h2>
+              <VueApexCharts type="line" :options="options2" :series="series2"></VueApexCharts>
+            </v-col>
+          </v-row>
+        </v-card>
+
+      </v-container>
+    </v-container>
+
+  </v-app>
 </template>
 
 <script>
@@ -22,6 +40,12 @@ export default {
       this.series = [{
         data: data
       }]
+    },
+    updateChart2(data) {
+
+      this.series2 = [{
+        data: data
+      }]
     }
   },
   data: function () {
@@ -32,12 +56,24 @@ export default {
         chart: {
           id: 'vuechart-example'
         },
-        xaxis: {
-          // categories: [1,2,3]
-        }
+        // yaxis: {
+        //   min: -250,
+        //   max: 200
+        // }
+
+      },
+         options2: {
+        chart: {
+          id: 'vuechart-example'
+        },
+
       },
       series: [{
         name: 'series-1',
+        data: []
+      }],
+      series2: [{
+        name: 'series-2',
         data: []
       }]
 
@@ -69,17 +105,18 @@ export default {
       }
 
     });
+
+    socket.on('something2', (data) => {
+      if (this.series2[0].data.length) {
+        let oldData = this.series2[0].data
+        oldData.push(data['data'])
+
+        this.updateChart2(oldData)
+      } else {
+        this.series2[0].data = data['data'];
+      }
+
+    });
   },
 };
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

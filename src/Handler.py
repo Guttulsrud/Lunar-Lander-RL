@@ -22,7 +22,12 @@ class Handler:
         self.created_at = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
         self.environment = None
         self.best_score_threshold = self.config['best_score_threshold']
-        self.best_score = -30_000
+        self.best_score = 246
+
+        for x in os.listdir('../models'):
+            if int(x.split('SCORE_')[1]) > self.best_score:
+                self.best_score = int(x.split('SCORE_')[1])
+
         if self.config['general']['save_results']:
             self.create_result_file()
 
@@ -55,23 +60,29 @@ class Handler:
         print(gravity_range)
         if gravity_range == 1:
             gravity_max = -15
+            eval_times = 3
         else:
+            eval_times = 1
             gravity_max = -20
         avg_total = []
         scores_total = []
         gravity = range(-5, gravity_max, gravity_range)
         length = len(gravity)
-        for progress, gravity in enumerate(gravity):
-            self.config['uncertainty']['gravity'] = gravity
+        for _ in range(eval_times):
+            for progress, gravity in enumerate(gravity):
+                self.config['uncertainty']['gravity'] = - 10 #todo remove me
+                # self.config['uncertainty']['gravity'] = gravity
 
-            self.environment = LunarLander(self.config)
-            avg, scores = evaluate_agent(self.environment, self.agent, self.config, progress + 1, length, render=True)
-            avg_total.append(avg)
-            scores_total += scores
+                self.environment = LunarLander(self.config)
+                avg, scores = evaluate_agent(self.environment, self.agent, self.config, progress + 1, length)
+                # avg, scores = evaluate_agent(self.environment, self.agent, self.config, progress + 1, length, render=True)
+                requests.post('http://localhost:5000/send', json={"data": avg, "title": self.dev_note, "training": True})
+
+                avg_total.append(avg)
+                scores_total += scores
 
         avg = np.mean(avg_total)
-        scores = np.mean(scores_total)
-        return avg, scores
+        return avg, scores_total
 
     def evaluate(self, episode):
 
@@ -133,7 +144,7 @@ class Handler:
         with open(f'../results/{self.created_at}.json', 'w') as f:
             json.dump(results, f)
 
-        requests.post('http://localhost:5000/send', json={"data": avg, "title": self.dev_note})
+        requests.post('http://localhost:5000/send', json={"data": avg, "title": self.dev_note, "training": False})
 
     def create_result_file(self):
 
