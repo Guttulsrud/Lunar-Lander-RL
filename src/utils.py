@@ -31,18 +31,27 @@ def load_model(path):
     return tf.keras.models.load_model(path)
 
 
+class MODEL_TYPE:
+    SINGLE = 'single'
+    DOUBLE = 'double'
+
+
 def get_config():
     with open('../config.yml') as f:
         config = yaml.load(f, Loader=SafeLoader)
 
+    if config['general']['model_type'] == MODEL_TYPE.SINGLE:
+        config['input_dimensions'] = 8
+    elif config['general']['model_type'] == MODEL_TYPE.DOUBLE:
+        config['input_dimensions'] = 16
+
     return config
 
 
-def evaluate_agent(environment, agent, config, progress, length, render=False, verbose=True, ):
+def evaluate_double_agent(environment, agent, config, episodes, render=False):
     episode_scores = []
-    if verbose:
-        print(f'Evaluating {progress}/{length}')
-    for episode in range(config['evaluation_episodes']):
+
+    for episode in range(episodes):
 
         current_observation = environment.reset()
         previous_observation = current_observation
@@ -66,34 +75,46 @@ def evaluate_agent(environment, agent, config, progress, length, render=False, v
             if done:
                 break
 
-        if verbose:
-            print('Reward: ', score)
-        environment.close()
         episode_scores.append(score)
 
     average_return = sum(episode_scores) / config['evaluation_episodes']
 
-    if verbose:
-        print(f'Average return: {average_return}')
-
-    # environment.close()
-
     return average_return, episode_scores
 
 
-def format_observation(observation):
-    return {
-        'position': {
-            'x': observation[0],
-            'y': observation[1],
-            'angle': observation[4],
-        },
-        'velocity': {
-            'x': observation[2],
-            'y': observation[3],
-            'angular_velocity': observation[5],
-        },
+def evaluate_agent(environment, agent, config, episodes):
+    if config['general']['model_type'] == MODEL_TYPE.SINGLE:
+        return evaluate_single_agent(environment=environment,
+                                     agent=agent,
+                                     config=config,
+                                     episodes=episodes)
+    elif config['general']['model_type'] == MODEL_TYPE.DOUBLE:
+        return evaluate_double_agent(environment=environment,
+                                     agent=agent,
+                                     config=config,
+                                     episodes=episodes)
 
-        'left_leg_contact': observation[6],
-        'right_leg_contact': observation[7]
-    }
+
+def evaluate_single_agent(environment, agent, config, episodes):
+    episode_scores = []
+
+    for episode in range(episodes):
+
+        observation = environment.reset()
+        score = 0.0
+
+        for step in range(config['max_steps']):
+            action = agent.choose_action(observation, policy='exploit')
+            next_observation, reward, done, info = environment.step(action)
+            score += reward
+            observation = next_observation
+            if config['general']['render_evaluation']:
+                environment.render()
+
+            if done:
+                break
+        episode_scores.append(score)
+
+    average_return = sum(episode_scores) / episodes
+
+    return average_return, episode_scores

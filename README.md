@@ -1,5 +1,6 @@
 # Lunar-Lander-RL
 
+#HUSK å få sjekke TF versjon slik at modelller kan lastes!
 ## Installation
 
 1. Create and activate new conda environment

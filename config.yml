@@ -1,18 +1,26 @@
 ---
 general:
+  model_type: single
   save_results: yes
-  render_env: no
+  render_training: no
+  render_evaluation: no
 uncertainty:
-  start_positions_x_range: [ 0, 550 ]
-  start_positions_y_range: [ 200, 400 ]
-  start_position: [ 300, 400 ]
-  gravity_range: [ -5, -15]
-  gravity: -10
+  gravity:
+    enabled: yes
+    default: -10
+    range: [ -15, -5 ]
+    value: None
+  random_start_position:
+    enabled: no
+    default: [ 300, 400 ]
+    x_range: [ 0, 550 ]
+    y_range: [ 200, 400 ]
+    value: None
 network:
   layers:
-    - nodes: 256
+    - nodes: 64
       activation: relu
-    - nodes: 256
+    - nodes: 64
       activation: relu
     - nodes: 4
       activation: linear
@@ -25,8 +33,8 @@ training:
     min: 0.01
     max: 0.2
     change: 1
-number_of_episodes: 500
-max_steps: 800
+number_of_episodes: 350
+max_steps: 1000
 input_dimensions: 16
 number_of_actions: 4
 gamma: 0.99
@@ -35,3 +43,4 @@ memory:
   size: 1000000
 evaluation_episodes: 1
 best_score_threshold: 20
+robust_test_threshold: 100

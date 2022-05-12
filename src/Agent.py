@@ -7,6 +7,7 @@ from tensorflow.keras.optimizers import Adam
 from datetime import datetime
 
 from ReplayBuffer import ReplayBuffer
+from utils import MODEL_TYPE
 
 
 class Agent:
@@ -19,9 +20,27 @@ class Agent:
         self.memory = ReplayBuffer(config)
         self.action_space = np.arange(self.config['number_of_actions'])
         if not pre_trained_model:
-            self.build_naive_model()
+            if self.config['general']['model_type'] == MODEL_TYPE.SINGLE:
+                self.build_naive_model()
+            elif self.config['general']['model_type'] == MODEL_TYPE.DOUBLE:
+                self.build_double_timestep_model()
+            else:
+                raise Exception('Invalid model type!')
         else:
             self.model = pre_trained_model
+
+    def build_double_timestep_model(self):
+        layers = self.config['network']['layers']
+        learning_rate = self.config['network']['learning_rate']
+        loss_function = self.config['network']['loss_function']
+        self.model = Sequential()
+
+        self.model.add(Input(shape=(16,)))
+
+        for layer in layers:
+            self.model.add(Dense(layer['nodes'] * 2, activation=layer['activation']))
+
+        self.model.compile(loss=loss_function, optimizer=Adam(learning_rate))
 
     def build_naive_model(self):
         layers = self.config['network']['layers']
@@ -29,7 +48,7 @@ class Agent:
         loss_function = self.config['network']['loss_function']
         self.model = Sequential()
 
-        self.model.add(Input(shape=(self.config['input_dimensions'],)))
+        self.model.add(Input(shape=(8,)))
 
         for layer in layers:
             self.model.add(Dense(layer['nodes'], activation=layer['activation']))
@@ -88,7 +107,3 @@ class Agent:
             os.mkdir(self.config['save_location'])
 
         self.model.save(self.config['save_location'] + model_name)
-
-
-
-

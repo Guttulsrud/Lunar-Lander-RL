@@ -6,23 +6,25 @@ import requests
 import numpy as np
 
 from Agent import Agent
-from utils import get_config, evaluate_agent
-# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+from utils import get_config, evaluate_double_agent, evaluate_single_agent, MODEL_TYPE, evaluate_agent
+# os.environ["CUDA_VISIBLE_DEVICES"] = "-1" #Disables GPU
 from custom_lunar_lander import LunarLander
+
+robust_test_threshold = 200
 
 
 # todo: Get better name for this
 class Handler:
     def __init__(self, dev_note, pre_trained_model=None):
         self.config = get_config()
-        self.dev_note = dev_note + str(self.config['number_of_episodes'])
+        self.dev_note = dev_note
 
         self.agent = Agent(config=self.config, pre_trained_model=pre_trained_model)
 
         self.created_at = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
         self.environment = None
         self.best_score_threshold = self.config['best_score_threshold']
-        self.best_score = 246
+        self.best_score = 200  # solved
 
         for x in os.listdir('../models'):
             if int(x.split('SCORE_')[1]) > self.best_score:
@@ -33,86 +35,108 @@ class Handler:
 
     def run(self):
         for episode in range(self.config['number_of_episodes']):
-            self.run_episode(episode)
+            print(f'\n----- EPISODE {episode}/{self.config["number_of_episodes"]} -----\n')
+            if self.config['general']['model_type'] == MODEL_TYPE.SINGLE:
+                self.run_single_episode(episode)
+            elif self.config['general']['model_type'] == MODEL_TYPE.DOUBLE:
+                self.run_double_episode(episode)
 
     def reload_config(self):
         self.config = get_config()
 
     def determine_uncertainties(self):
+        gravity = self.config['uncertainty']['gravity']
+        random_start_position = self.config['uncertainty']['random_start_position']
+
         # Determine random start position for lander
-        if not self.config['uncertainty'].get('start_position'):
-            x_low = self.config['uncertainty']['start_positions_x_range'][0]
-            x_high = self.config['uncertainty']['start_positions_x_range'][1]
+        if random_start_position['enabled']:
+            x_low = random_start_position['x_range'][0]
+            x_high = random_start_position['x_range'][1]
 
-            y_low = self.config['uncertainty']['start_positions_y_range'][0]
-            y_high = self.config['uncertainty']['start_positions_y_range'][1]
+            y_low = random_start_position['y_range'][0]
+            y_high = random_start_position['y_range'][1]
 
-            self.config['uncertainty']['start_position'] = randrange(x_low, x_high), randrange(y_low, y_high)
-
-        # Determine random start gravity of planet
-        if not self.config['uncertainty'].get('gravity'):
-            gravity_low = self.config['uncertainty']['gravity_range'][1]
-            gravity_high = self.config['uncertainty']['gravity_range'][0]
-
-            self.config['uncertainty']['gravity'] = randrange(gravity_low, gravity_high)
-
-    def simulate(self, gravity_range=-5):
-        print(gravity_range)
-        if gravity_range == 1:
-            gravity_max = -15
-            eval_times = 3
+            self.config['uncertainty']['random_start_position']['value'] = randrange(x_low, x_high), randrange(y_low,
+                                                                                                               y_high)
         else:
-            eval_times = 1
-            gravity_max = -20
+            self.config['uncertainty']['random_start_position']['value'] = random_start_position['default']
+        # Determine random start gravity of planet
+        if gravity['enabled']:
+            gravity_low = gravity['range'][0]
+            gravity_high = gravity['range'][1]
+
+            self.config['uncertainty']['gravity']['value'] = randrange(gravity_low, gravity_high)
+        else:
+            self.config['uncertainty']['gravity']['value'] = gravity['default']
+
+    def simulate(self, robust=False):
+
         avg_total = []
         scores_total = []
-        gravity = range(-5, gravity_max, gravity_range)
-        length = len(gravity)
-        for _ in range(eval_times):
-            for progress, gravity in enumerate(gravity):
-                self.config['uncertainty']['gravity'] = - 10 #todo remove me
-                # self.config['uncertainty']['gravity'] = gravity
 
-                self.environment = LunarLander(self.config)
-                avg, scores = evaluate_agent(self.environment, self.agent, self.config, progress + 1, length)
-                # avg, scores = evaluate_agent(self.environment, self.agent, self.config, progress + 1, length, render=True)
-                requests.post('http://localhost:5000/send', json={"data": avg, "title": self.dev_note, "training": True})
+        if self.config['uncertainty']['gravity']['enabled']:
 
-                avg_total.append(avg)
-                scores_total += scores
+            if robust:
+                configurations = [{'gravity': x} for x in range(-15, -4)]
+                evaluations_per_gravity = 3
+            else:
+                configurations = [{'gravity': x} for x in range(-15, -4, 5)]
+                evaluations_per_gravity = 1
+        else:
+            configurations = [{'gravity': self.config['uncertainty']['gravity']['value']}]
+
+            if robust:
+                evaluations_per_gravity = 5
+            else:
+                evaluations_per_gravity = 1
+
+        for test in configurations:
+            self.config['uncertainty']['gravity']['value'] = test['gravity']
+            self.environment = LunarLander(self.config)
+
+            avg, scores = evaluate_agent(environment=self.environment,
+                                         agent=self.agent,
+                                         config=self.config,
+                                         episodes=evaluations_per_gravity)
+
+            avg_total.append(avg)
+            scores_total += scores
 
         avg = np.mean(avg_total)
         return avg, scores_total
 
     def evaluate(self, episode):
-
+        print('Evaluating..')
         self.reload_config()
-        # self.determine_uncertainties()
-        avg, scores = self.simulate()
-        print('Average: ', avg)
+        self.determine_uncertainties()
 
-        if avg > self.best_score:
-            print('New best model!')
-            self.best_score = avg
-            self.agent.save_model(score=avg)
-            self.simulate(gravity_range=-1)
+        avg, scores = self.simulate()
+        print('Agent got average return on simple evaluation: ', avg)
+
+        if avg > robust_test_threshold:
+            print('Agent received score above threshold')
+            avg, scores = self.simulate(robust=True)
+            print(f'Agent received score of {avg} on robust test')
+
+            if avg > self.best_score:
+                print('Agent is new best. Saving model')
+                self.best_score = avg
+                self.agent.save_model(score=avg)
 
         if self.config['general']['save_results']:
             self.save_results_to_file(episode=episode, avg=avg, scores=scores)
 
-    def run_episode(self, episode):
+    def run_double_episode(self, episode):
         self.reload_config()
         self.determine_uncertainties()
-
         self.environment = LunarLander(self.config)
 
-        print(f'Episode: {episode}.')
         current_observation = self.environment.reset()
         previous_observation = current_observation
 
         for step in range(self.config['max_steps']):
-            # if self.config['general']['render_env']:
-            #     self.environment.render()
+            if self.config['general']['render_training']:
+                self.environment.render()
 
             previous_and_current_observation = np.append(previous_observation, current_observation)
             action = self.agent.choose_action(previous_and_current_observation)
@@ -124,6 +148,30 @@ class Handler:
             previous_observation = current_observation
             current_observation = next_observation
 
+            self.agent.learn()
+
+            if done:
+                break
+
+        self.evaluate(episode)
+
+    def run_single_episode(self, episode):
+        self.reload_config()
+        self.determine_uncertainties()
+        self.environment = LunarLander(self.config)
+
+        observation = self.environment.reset()
+
+        print(f'Training..')
+        for step in range(self.config['max_steps']):
+            if self.config['general']['render_training']:
+                self.environment.render()
+
+            action = self.agent.choose_action(observation)
+            next_observation, reward, done, info = self.environment.step(action)
+
+            self.agent.remember(observation, action, reward, next_observation, done)
+            observation = next_observation
             self.agent.learn()
 
             if done:
@@ -144,7 +192,7 @@ class Handler:
         with open(f'../results/{self.created_at}.json', 'w') as f:
             json.dump(results, f)
 
-        requests.post('http://localhost:5000/send', json={"data": avg, "title": self.dev_note, "training": False})
+        # requests.post('http://localhost:5000/send', json={"data": avg, "title": self.dev_note, "training": False})
 
     def create_result_file(self):
 

@@ -142,9 +142,9 @@ class LunarLander(gym.Env, EzPickle):
     metadata = {"render_modes": ["human", "rgb_array"], "render_fps": FPS}
 
     def __init__(self, config, continuous: bool = False):
-        start_position = config['uncertainty']['start_position']
-        gravity = config['uncertainty']['gravity']
-
+        start_position = config['uncertainty']['random_start_position']['value']
+        gravity = config['uncertainty']['gravity']['value']
+        print(f'Constructing LunarLander environment with gravity: {gravity}, position: {start_position}')
         EzPickle.__init__(self)
         self.config = config
         self.spawn_x, self.spawn_y = start_position
