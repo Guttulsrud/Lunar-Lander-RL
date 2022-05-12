@@ -19,7 +19,7 @@ def plot_results(file_name):
     plt.plot(r['average_return'], label='Average score')
     plt.plot(r['rolling_average'], label='Rolling average 5')
     ax = sns.lineplot(r['rolling_average'])
-    # ax.set_ylim(-500, 300)
+    ax.set_ylim(-500, 500)
 
     ax.set(xlabel='Episodes', ylabel='Score')
     # Size of replay buffer? Since its gets full. 2% exploration?
@@ -33,6 +33,6 @@ def plot_results(file_name):
 
 
 if __name__ == '__main__':
-    file_name = os.listdir('../results')[-2]
+    file_name = os.listdir('../results')[-1]
 
     plot_results(file_name)

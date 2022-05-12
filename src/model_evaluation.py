@@ -10,12 +10,15 @@ def evaluate_agent(agent, render=True, verbose=True):
 
     episode_scores = []
     for episode in range(100):
-        gravity_low = config['uncertainty']['gravity_range'][1]
-        gravity_high = config['uncertainty']['gravity_range'][0]
+        #gravity_low = config['uncertainty']['gravity_range'][1]
+        #gravity_high = config['uncertainty']['gravity_range'][0]
 
-        config['uncertainty']['gravity'] = randrange(-7, -5)
+ #       config['uncertainty']['gravity'] = randrange(-7, -5)
         # config['uncertainty']['gravity'] = randrange(gravity_low, gravity_high)
-        print('Gravity: ', config['uncertainty']['gravity'])
+        #print('Gravity: ', config['uncertainty']['gravity'])
+        pos = [randrange(0, 550), 0]
+        config['uncertainty']['random_start_position']['value'] = pos
+        print('Position: ', pos)
 
         environment = LunarLander(config)
 
@@ -46,5 +49,5 @@ def evaluate_agent(agent, render=True, verbose=True):
 
 
 if __name__ == '__main__':
-    model = load_model(path='22-05-04_22-13_SCORE_176')
+    model = load_model(path='22-05-12_12-27_SCORE_281')
     evaluate_agent(agent=model)

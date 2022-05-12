@@ -10,9 +10,6 @@ from utils import get_config, evaluate_double_agent, evaluate_single_agent, MODE
 # os.environ["CUDA_VISIBLE_DEVICES"] = "-1" #Disables GPU
 from custom_lunar_lander import LunarLander
 
-robust_test_threshold = 200
-
-
 # todo: Get better name for this
 class Handler:
     def __init__(self, dev_note, pre_trained_model=None):
@@ -23,8 +20,7 @@ class Handler:
 
         self.created_at = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
         self.environment = None
-        self.best_score_threshold = self.config['best_score_threshold']
-        self.best_score = 200  # solved
+        self.best_score = self.config['best_score']
 
         for x in os.listdir('../models'):
             if int(x.split('SCORE_')[1]) > self.best_score:
@@ -74,30 +70,38 @@ class Handler:
         avg_total = []
         scores_total = []
 
+        evaluations_per_configuration = 3 if robust else 1
+        number_of_configurations = 11 if robust else 3
+
         if self.config['uncertainty']['gravity']['enabled']:
-
-            if robust:
-                configurations = [{'gravity': x} for x in range(-15, -4)]
-                evaluations_per_gravity = 3
-            else:
-                configurations = [{'gravity': x} for x in range(-15, -4, 5)]
-                evaluations_per_gravity = 1
+            gravity_config = list(np.linspace(-15, -5, number_of_configurations, dtype=int)) * evaluations_per_configuration
         else:
-            configurations = [{'gravity': self.config['uncertainty']['gravity']['value']}]
+            default_gravity = self.config['uncertainty']['gravity']['default']
+            gravity_config = np.full(number_of_configurations * evaluations_per_configuration, default_gravity)
 
-            if robust:
-                evaluations_per_gravity = 5
-            else:
-                evaluations_per_gravity = 1
+        if self.config['uncertainty']['random_start_position']['enabled']:
+            x = np.linspace(0, 551, number_of_configurations, dtype=int)
+            y = [400 for _ in range(number_of_configurations)]
+            position_config = list(zip(x, y)) * evaluations_per_configuration
+        else:
+            default_start_position = self.config['uncertainty']['random_start_position']['default']
+            position_config = np.full(number_of_configurations * evaluations_per_configuration, default_start_position)
 
-        for test in configurations:
-            self.config['uncertainty']['gravity']['value'] = test['gravity']
+        np.random.shuffle(position_config)
+        np.random.shuffle(gravity_config)
+
+        print(position_config)
+        print(gravity_config)
+
+        for position, gravity in zip(position_config, gravity_config):
+            self.config['uncertainty']['gravity']['value'] = int(gravity)
+            self.config['uncertainty']['random_start_position']['value'] = int(position[0]), int(position[1])
             self.environment = LunarLander(self.config)
 
             avg, scores = evaluate_agent(environment=self.environment,
                                          agent=self.agent,
                                          config=self.config,
-                                         episodes=evaluations_per_gravity)
+                                         episodes=1)
 
             avg_total.append(avg)
             scores_total += scores
@@ -113,7 +117,7 @@ class Handler:
         avg, scores = self.simulate()
         print('Agent got average return on simple evaluation: ', avg)
 
-        if avg > robust_test_threshold:
+        if avg > self.config['robust_test_threshold']:
             print('Agent received score above threshold')
             avg, scores = self.simulate(robust=True)
             print(f'Agent received score of {avg} on robust test')
@@ -189,6 +193,8 @@ class Handler:
                     'episode_scores': scores,
                     'uncertainty': self.config['uncertainty'],
                 })
+
+        print(results)
         with open(f'../results/{self.created_at}.json', 'w') as f:
             json.dump(results, f)
 

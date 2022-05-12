@@ -11,10 +11,10 @@ uncertainty:
     range: [ -15, -5 ]
     value: None
   random_start_position:
-    enabled: no
+    enabled: yes
     default: [ 300, 400 ]
     x_range: [ 0, 550 ]
-    y_range: [ 200, 400 ]
+    y_range: [ 400, 401 ]
     value: None
 network:
   layers:
@@ -42,5 +42,5 @@ save_location: ../models/
 memory:
   size: 1000000
 evaluation_episodes: 1
-best_score_threshold: 20
-robust_test_threshold: 100
+best_score: 200
+robust_test_threshold: 200
