@@ -70,28 +70,26 @@ class Handler:
         avg_total = []
         scores_total = []
 
-        evaluations_per_configuration = 3 if robust else 1
-        number_of_configurations = 11 if robust else 3
+        evaluations_per_steps = 1 if robust else 1
+        # evaluations_per_configuration = 3 if robust else 1
+        steps_in_range = 11 if robust else 3
 
         if self.config['uncertainty']['gravity']['enabled']:
-            gravity_config = list(np.linspace(-15, -5, number_of_configurations, dtype=int)) * evaluations_per_configuration
+            gravity_config = list(np.linspace(-15, -5, steps_in_range, dtype=int)) * evaluations_per_steps
         else:
             default_gravity = self.config['uncertainty']['gravity']['default']
-            gravity_config = np.full(number_of_configurations * evaluations_per_configuration, default_gravity)
+            gravity_config = np.full(steps_in_range * evaluations_per_steps, default_gravity)
 
         if self.config['uncertainty']['random_start_position']['enabled']:
-            x = np.linspace(0, 551, number_of_configurations, dtype=int)
-            y = [400 for _ in range(number_of_configurations)]
-            position_config = list(zip(x, y)) * evaluations_per_configuration
+            x = np.linspace(0, 551, steps_in_range, dtype=int)
+            y = [400 for _ in range(steps_in_range)]
+            position_config = list(zip(x, y)) * evaluations_per_steps
         else:
             default_start_position = self.config['uncertainty']['random_start_position']['default']
-            position_config = np.full(number_of_configurations * evaluations_per_configuration, default_start_position)
+            position_config = np.full(steps_in_range * evaluations_per_steps, default_start_position)
 
         np.random.shuffle(position_config)
         np.random.shuffle(gravity_config)
-
-        print(position_config)
-        print(gravity_config)
 
         for position, gravity in zip(position_config, gravity_config):
             self.config['uncertainty']['gravity']['value'] = int(gravity)
@@ -209,10 +207,3 @@ class Handler:
 
         with open(f'../results/{self.created_at}.json', 'w') as f:
             json.dump({'note': self.dev_note, 'results': [], 'config': self.config}, f)
-
-
-def terminate_episode(observation, done):
-    x = observation[0]
-    y = observation[1]
-    if done:
-        return True
