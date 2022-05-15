@@ -49,5 +49,5 @@ def evaluate_agent(agent, render=True, verbose=True):
 
 
 if __name__ == '__main__':
-    model = load_model(path='22-05-12_12-27_SCORE_281')
+    model = load_model(path='22-05-12_11-16_SCORE_272')
     evaluate_agent(agent=model)

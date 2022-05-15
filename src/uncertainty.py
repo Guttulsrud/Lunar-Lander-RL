@@ -15,4 +15,8 @@ def determine_uncertainties(config):
         config['uncertainty']['gravity'] = random.randrange(config['uncertainty']['gravity_range'][1],
                                                             config['uncertainty']['gravity_range'][0])
 
+    if not config['uncertainty'].get('wind'):
+        config['uncertainty']['wind'] = random.randrange(config['uncertainty']['gravity_range'][1],
+                                                            config['uncertainty']['gravity_range'][0])
+
     return config

@@ -5,13 +5,18 @@ general:
   render_training: no
   render_evaluation: no
 uncertainty:
-  gravity:
+  wind:
     enabled: yes
+    default: 0
+    range: [1, 19]
+    value: None
+  gravity:
+    enabled: no
     default: -10
     range: [ -15, -5 ]
     value: None
   random_start_position:
-    enabled: yes
+    enabled: no
     default: [ 300, 400 ]
     x_range: [ 0, 550 ]
     y_range: [ 400, 401 ]

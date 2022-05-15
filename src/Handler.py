@@ -8,7 +8,11 @@ import numpy as np
 from Agent import Agent
 from utils import get_config, evaluate_double_agent, evaluate_single_agent, MODEL_TYPE, evaluate_agent
 # os.environ["CUDA_VISIBLE_DEVICES"] = "-1" #Disables GPU
-from custom_lunar_lander import LunarLander
+from new_custom_lunar_lander import LunarLander
+
+
+# from custom_lunar_lander import LunarLander
+
 
 # todo: Get better name for this
 class Handler:
@@ -43,6 +47,7 @@ class Handler:
     def determine_uncertainties(self):
         gravity = self.config['uncertainty']['gravity']
         random_start_position = self.config['uncertainty']['random_start_position']
+        wind = self.config['uncertainty']['wind']
 
         # Determine random start position for lander
         if random_start_position['enabled']:
@@ -65,6 +70,14 @@ class Handler:
         else:
             self.config['uncertainty']['gravity']['value'] = gravity['default']
 
+        if wind['enabled']:
+            wind_low = wind['range'][0]
+            wind_high = wind['range'][1]
+
+            self.config['uncertainty']['wind']['value'] = randrange(wind_low, wind_high)
+        else:
+            self.config['uncertainty']['wind']['value'] = wind['default']
+
     def simulate(self, robust=False):
 
         avg_total = []
@@ -74,10 +87,18 @@ class Handler:
         number_of_configurations = 11 if robust else 3
 
         if self.config['uncertainty']['gravity']['enabled']:
-            gravity_config = list(np.linspace(-15, -5, number_of_configurations, dtype=int)) * evaluations_per_configuration
+            gravity_config = list(
+                np.linspace(-15, -5, number_of_configurations, dtype=int)) * evaluations_per_configuration
         else:
             default_gravity = self.config['uncertainty']['gravity']['default']
             gravity_config = np.full(number_of_configurations * evaluations_per_configuration, default_gravity)
+
+        if self.config['uncertainty']['wind']['enabled']:
+            wind_config = list(
+                np.linspace(1, 19, number_of_configurations, dtype=int)) * evaluations_per_configuration
+        else:
+            default_wind = self.config['uncertainty']['wind']['default']
+            wind_config = np.full(number_of_configurations * evaluations_per_configuration, default_wind)
 
         if self.config['uncertainty']['random_start_position']['enabled']:
             x = np.linspace(0, 551, number_of_configurations, dtype=int)
@@ -85,16 +106,16 @@ class Handler:
             position_config = list(zip(x, y)) * evaluations_per_configuration
         else:
             default_start_position = self.config['uncertainty']['random_start_position']['default']
-            position_config = np.full(number_of_configurations * evaluations_per_configuration, default_start_position)
+            position_config = np.full((number_of_configurations * evaluations_per_configuration, 2),
+                                      default_start_position)
 
         np.random.shuffle(position_config)
         np.random.shuffle(gravity_config)
+        np.random.shuffle(wind_config)
 
-        print(position_config)
-        print(gravity_config)
-
-        for position, gravity in zip(position_config, gravity_config):
+        for position, gravity, wind in zip(position_config, gravity_config, wind_config):
             self.config['uncertainty']['gravity']['value'] = int(gravity)
+            self.config['uncertainty']['wind']['value'] = int(wind)
             self.config['uncertainty']['random_start_position']['value'] = int(position[0]), int(position[1])
             self.environment = LunarLander(self.config)
 
