@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
 # 1. Single(64) no uncertainty. DONE
 # 2. Single(64) gravity DONE
-# 3. Single(64) position
+# 3. Single(64) position DONE
 # 4. Single(64) gravity + position
 # 5. Single(64) wind
 # 6. Single(64) gravity + position + wind
