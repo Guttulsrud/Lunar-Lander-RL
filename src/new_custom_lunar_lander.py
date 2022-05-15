@@ -176,11 +176,12 @@ class LunarLander(gym.Env, EzPickle):
         continuous: bool = False,
     ):
 
-
+        start_position = config['uncertainty']['random_start_position']['value']
+        gravity = config['uncertainty']['gravity']['value']
         enable_wind = config['uncertainty']['wind']['enabled']
         wind_power = config['uncertainty']['wind']['value']
-        gravity = config['uncertainty']['gravity']['value']
-        print(f'Constructing LunarLander environment with wind: {wind_power}')
+
+        print(f'Constructing LunarLander environment with gravity: {gravity}, position: {start_position}, wind: {wind_power}')
 
         EzPickle.__init__(self)
 
@@ -197,6 +198,7 @@ class LunarLander(gym.Env, EzPickle):
         self.enable_wind = enable_wind
         self.wind_idx = np.random.randint(-9999, 9999)
 
+        self.spawn_x, self.spawn_y = start_position
         self.screen = None
         self.clock = None
         self.isopen = True
@@ -315,7 +317,7 @@ class LunarLander(gym.Env, EzPickle):
 
         initial_y = VIEWPORT_H / SCALE
         self.lander = self.world.CreateDynamicBody(
-            position=(VIEWPORT_W / SCALE / 2, initial_y),
+            position=(self.spawn_x / SCALE, self.spawn_y / SCALE),
             angle=0.0,
             fixtures=fixtureDef(
                 shape=polygonShape(
@@ -330,18 +332,18 @@ class LunarLander(gym.Env, EzPickle):
         )
         self.lander.color1 = (128, 102, 230)
         self.lander.color2 = (77, 77, 128)
-        # self.lander.ApplyForceToCenter(
-        #     (
-        #         self.np_random.uniform(-INITIAL_RANDOM, INITIAL_RANDOM),
-        #         self.np_random.uniform(-INITIAL_RANDOM, INITIAL_RANDOM),
-        #     ),
-        #     True,
-        # )
+        self.lander.ApplyForceToCenter(
+            (
+                self.np_random.uniform(-INITIAL_RANDOM, INITIAL_RANDOM),
+                self.np_random.uniform(-INITIAL_RANDOM, INITIAL_RANDOM),
+            ),
+            True,
+        )
 
         self.legs = []
         for i in [-1, +1]:
             leg = self.world.CreateDynamicBody(
-                position=(VIEWPORT_W / SCALE / 2 - i * LEG_AWAY / SCALE, initial_y),
+                position=(self.spawn_x / SCALE - i * LEG_AWAY / SCALE, self.spawn_y / SCALE),
                 angle=(i * 0.05),
                 fixtures=fixtureDef(
                     shape=polygonShape(box=(LEG_W / SCALE, LEG_H / SCALE)),

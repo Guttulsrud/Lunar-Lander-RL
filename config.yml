@@ -2,8 +2,8 @@
 general:
   model_type: single
   save_results: yes
-  render_training: no
-  render_evaluation: no
+  render_training: yes
+  render_evaluation: yes
 uncertainty:
   wind:
     enabled: yes
@@ -11,12 +11,12 @@ uncertainty:
     range: [1, 19]
     value: None
   gravity:
-    enabled: no
+    enabled: yes
     default: -10
     range: [ -15, -5 ]
     value: None
   random_start_position:
-    enabled: no
+    enabled: yes
     default: [ 300, 400 ]
     x_range: [ 0, 550 ]
     y_range: [ 400, 401 ]
