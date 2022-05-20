@@ -193,19 +193,16 @@ class LunarLander(gym.Env, EzPickle):
         # assert (
         #     0.0 < wind_power and wind_power < 20.0
         # ), f"wind_power (current value: {wind_power}) must be between 0 and 20"
-        self.wind_power = 0 #todo remove me
-        # self.wind_power = wind_power
+        self.wind_power = wind_power
 
         self.enable_wind = enable_wind
         self.wind_idx = np.random.randint(-9999, 9999)
 
-        self.spawn_x, self.spawn_y = 300, 400 #todo: remove me
-        # self.spawn_x, self.spawn_y = start_position
+        self.spawn_x, self.spawn_y = start_position
         self.screen = None
         self.clock = None
         self.isopen = True
-        self.world = Box2D.b2World(gravity=(0, -10)) #todo remove me
-        # self.world = Box2D.b2World(gravity=(0, gravity))
+        self.world = Box2D.b2World(gravity=(0, gravity))
         self.moon = None
         self.lander = None
         self.particles = []
