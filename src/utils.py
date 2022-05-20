@@ -34,6 +34,7 @@ def load_model(path):
 class MODEL_TYPE:
     SINGLE = 'single'
     DOUBLE = 'double'
+    LSTM = 'lstm'
 
 
 def get_config():
@@ -43,7 +44,9 @@ def get_config():
     if config['general']['model_type'] == MODEL_TYPE.SINGLE:
         config['input_dimensions'] = 8
     elif config['general']['model_type'] == MODEL_TYPE.DOUBLE:
-        config['input_dimensions'] = 16
+        config['input_dimensions'] = 17
+    elif config['general']['model_type'] == MODEL_TYPE.LSTM:
+        config['input_dimensions'] = 17
 
     return config
 
@@ -55,18 +58,25 @@ def evaluate_double_agent(environment, agent, config, episodes, render=False):
 
         current_observation = environment.reset()
         previous_observation = current_observation
+        previous_action = 0
 
         score = 0.0
 
         for step in range(config['max_steps']):
+            # gravity = config['uncertainty']['gravity']['value']
+            # wind = config['uncertainty']['wind']['value']
+            previous_and_current = np.append(previous_observation, current_observation)
+            previous_and_current_observation = np.append(previous_and_current, previous_action)
+            # previous_and_current_observation = np.append(previous_and_current_observation, wind)
+            # previous_and_current_observation = np.append(previous_and_current_observation, gravity)
 
-            previous_and_current_observation = np.append(previous_observation, current_observation)
             action = agent.choose_action(previous_and_current_observation, policy='exploit')
 
             next_observation, reward, done, info = environment.step(action)
 
             previous_observation = current_observation
             current_observation = next_observation
+            previous_action = action
 
             score += reward
             if render:

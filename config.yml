@@ -1,10 +1,15 @@
 ---
 general:
-  model_type: single
+  model_type: double
   save_results: yes
   render_training: no
   render_evaluation: no
 uncertainty:
+  wind:
+    enabled: yes
+    default: 0
+    range: [1, 19]
+    value: None
   gravity:
     enabled: yes
     default: -10
@@ -18,9 +23,9 @@ uncertainty:
     value: None
 network:
   layers:
-    - nodes: 64
+    - nodes: 128
       activation: relu
-    - nodes: 64
+    - nodes: 128
       activation: relu
     - nodes: 4
       activation: linear
@@ -35,7 +40,7 @@ training:
     change: 1
 number_of_episodes: 350
 max_steps: 1000
-input_dimensions: 16
+input_dimensions: 17
 number_of_actions: 4
 gamma: 0.99
 save_location: ../models/

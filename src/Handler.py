@@ -8,14 +8,17 @@ import numpy as np
 from Agent import Agent
 from utils import get_config, evaluate_double_agent, evaluate_single_agent, MODEL_TYPE, evaluate_agent
 # os.environ["CUDA_VISIBLE_DEVICES"] = "-1" #Disables GPU
-from custom_lunar_lander import LunarLander
+from new_custom_lunar_lander import LunarLander
+
+
+# from custom_lunar_lander import LunarLander
+
 
 # todo: Get better name for this
 class Handler:
     def __init__(self, dev_note, pre_trained_model=None):
         self.config = get_config()
         self.dev_note = dev_note
-
         self.agent = Agent(config=self.config, pre_trained_model=pre_trained_model)
 
         self.created_at = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
@@ -36,6 +39,8 @@ class Handler:
                 self.run_single_episode(episode)
             elif self.config['general']['model_type'] == MODEL_TYPE.DOUBLE:
                 self.run_double_episode(episode)
+            elif self.config['general']['model_type'] == MODEL_TYPE.LSTM:
+                self.run_lstm(episode)
 
     def reload_config(self):
         self.config = get_config()
@@ -43,6 +48,7 @@ class Handler:
     def determine_uncertainties(self):
         gravity = self.config['uncertainty']['gravity']
         random_start_position = self.config['uncertainty']['random_start_position']
+        wind = self.config['uncertainty']['wind']
 
         # Determine random start position for lander
         if random_start_position['enabled']:
@@ -65,34 +71,52 @@ class Handler:
         else:
             self.config['uncertainty']['gravity']['value'] = gravity['default']
 
+        if wind['enabled']:
+            wind_low = wind['range'][0]
+            wind_high = wind['range'][1]
+
+            self.config['uncertainty']['wind']['value'] = randrange(wind_low, wind_high)
+        else:
+            self.config['uncertainty']['wind']['value'] = wind['default']
+
     def simulate(self, robust=False):
 
         avg_total = []
         scores_total = []
 
-        evaluations_per_steps = 1 if robust else 1
-        # evaluations_per_configuration = 3 if robust else 1
-        steps_in_range = 11 if robust else 3
+        evaluations_per_configuration = 3 if robust else 1
+        number_of_configurations = 11 if robust else 3
 
         if self.config['uncertainty']['gravity']['enabled']:
-            gravity_config = list(np.linspace(-15, -5, steps_in_range, dtype=int)) * evaluations_per_steps
+            gravity_config = list(
+                np.linspace(-15, -5, number_of_configurations, dtype=int)) * evaluations_per_configuration
         else:
             default_gravity = self.config['uncertainty']['gravity']['default']
-            gravity_config = np.full(steps_in_range * evaluations_per_steps, default_gravity)
+            gravity_config = np.full(number_of_configurations * evaluations_per_configuration, default_gravity)
+
+        if self.config['uncertainty']['wind']['enabled']:
+            wind_config = list(
+                np.linspace(1, 19, number_of_configurations, dtype=int)) * evaluations_per_configuration
+        else:
+            default_wind = self.config['uncertainty']['wind']['default']
+            wind_config = np.full(number_of_configurations * evaluations_per_configuration, default_wind)
 
         if self.config['uncertainty']['random_start_position']['enabled']:
-            x = np.linspace(0, 551, steps_in_range, dtype=int)
-            y = [400 for _ in range(steps_in_range)]
-            position_config = list(zip(x, y)) * evaluations_per_steps
+            x = np.linspace(0, 551, number_of_configurations, dtype=int)
+            y = [400 for _ in range(number_of_configurations)]
+            position_config = list(zip(x, y)) * evaluations_per_configuration
         else:
             default_start_position = self.config['uncertainty']['random_start_position']['default']
-            position_config = np.full(steps_in_range * evaluations_per_steps, default_start_position)
+            position_config = np.full((number_of_configurations * evaluations_per_configuration, 2),
+                                      default_start_position)
 
         np.random.shuffle(position_config)
         np.random.shuffle(gravity_config)
+        np.random.shuffle(wind_config)
 
-        for position, gravity in zip(position_config, gravity_config):
+        for position, gravity, wind in zip(position_config, gravity_config, wind_config):
             self.config['uncertainty']['gravity']['value'] = int(gravity)
+            self.config['uncertainty']['wind']['value'] = int(wind)
             self.config['uncertainty']['random_start_position']['value'] = int(position[0]), int(position[1])
             self.environment = LunarLander(self.config)
 
@@ -135,20 +159,25 @@ class Handler:
 
         current_observation = self.environment.reset()
         previous_observation = current_observation
+        previous_action = 0
 
         for step in range(self.config['max_steps']):
             if self.config['general']['render_training']:
                 self.environment.render()
 
-            previous_and_current_observation = np.append(previous_observation, current_observation)
-            action = self.agent.choose_action(previous_and_current_observation)
+            previous_and_current = np.append(previous_observation, current_observation)
+            previous_and_current_observation = np.append(previous_and_current, previous_action)
 
+            action = self.agent.choose_action(previous_and_current_observation)
             next_observation, reward, done, info = self.environment.step(action)
-            current_and_next_observation = np.append(current_observation, next_observation)
+            current_and_next = np.append(current_observation, next_observation)
+            current_and_next_observation = np.append(current_and_next, action)
 
             self.agent.remember(previous_and_current_observation, action, reward, current_and_next_observation, done)
+
             previous_observation = current_observation
             current_observation = next_observation
+            previous_action = action
 
             self.agent.learn()
 

@@ -1,7 +1,7 @@
 import os
 
 import numpy as np
-from tensorflow.keras.layers import Dense, Input
+from tensorflow.keras.layers import Dense, Input, LSTM
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 from datetime import datetime
@@ -24,6 +24,8 @@ class Agent:
                 self.build_naive_model()
             elif self.config['general']['model_type'] == MODEL_TYPE.DOUBLE:
                 self.build_double_timestep_model()
+            elif self.config['general']['model_type'] == MODEL_TYPE.LSTM:
+                self.build_sequential_model()
             else:
                 raise Exception('Invalid model type!')
         else:
@@ -35,10 +37,22 @@ class Agent:
         loss_function = self.config['network']['loss_function']
         self.model = Sequential()
 
-        self.model.add(Input(shape=(16,)))
+        self.model.add(Input(shape=(17,)))
 
         for layer in layers:
-            self.model.add(Dense(layer['nodes'] * 2, activation=layer['activation']))
+            self.model.add(Dense(layer['nodes'], activation=layer['activation']))
+
+        self.model.compile(loss=loss_function, optimizer=Adam(learning_rate))
+
+    def build_sequential_model(self):
+        learning_rate = self.config['network']['learning_rate']
+        loss_function = self.config['network']['loss_function']
+
+        self.model = Sequential()
+
+        self.model.add(LSTM(128, input_shape=(1, 17)), activation='tanh')
+        self.model.add(Dense(128, activation='relu'))
+        self.model.add(Dense(4, activation='linear'))
 
         self.model.compile(loss=loss_function, optimizer=Adam(learning_rate))
 
@@ -58,15 +72,14 @@ class Agent:
     def remember(self, state, action, reward, next_state, done):
         self.memory.store(state, action, reward, next_state, done)
 
-    def choose_action(self, state, policy='explore'):
-        state = state[np.newaxis, :]
+    def choose_action(self, current, policy='explore'):
+        current = current[np.newaxis, :]
         random_chance = np.random.uniform(0, 1)
         if random_chance > self.exploration_rate or policy == 'exploit':
-            prediction = self.model.predict(state)
+            prediction = self.model.predict(current)
             action = np.argmax(prediction)
         else:
             action = np.random.choice(self.action_space)
-
         return action
 
     def learn(self):
