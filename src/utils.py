@@ -73,7 +73,7 @@ def evaluate_multi_agent(environment, agent, config, episodes, timesteps=4):
 
             next_observation, reward, done, info = environment.step(action)
 
-            observations = np.roll(observations, shift=-1)
+            observations = np.roll(observations, shift=-1, axis=0)
             actions = np.roll(actions, shift=-1)
             observations[-1] = next_observation
             actions[-1] = action

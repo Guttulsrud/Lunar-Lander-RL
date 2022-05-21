@@ -164,20 +164,20 @@ class Handler:
 
         next_observations_and_actions = np.append(observations, actions)
 
+        score = 0.0
+
         for step in range(self.config['max_steps']):
             if self.config['general']['render_training']:
                 self.environment.render()
             observations_and_actions = next_observations_and_actions
-            print(observations_and_actions)
             action = self.agent.choose_action(observations_and_actions)
-            print(action)
             next_observation, reward, done, info = self.environment.step(action)
+            score += reward
 
-            observations = np.roll(observations, shift=-1)
+            observations = np.roll(observations, shift=-1, axis=0)
             actions = np.roll(actions, shift=-1)
             observations[-1] = next_observation
             actions[-1] = action
-
 
             next_observations_and_actions = np.append(observations, actions)
 
@@ -187,6 +187,7 @@ class Handler:
             if done:
                 break
 
+        print(score)
         self.evaluate(episode)
 
     def run_double_episode(self, episode):

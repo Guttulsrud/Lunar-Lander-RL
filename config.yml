@@ -3,21 +3,21 @@ general:
   model_type: multi
   save_results: yes
   render_training: no
-  render_evaluation: yes
+  render_evaluation: no
   verbose: no
 uncertainty:
   wind:
-    enabled: no
+    enabled: yes
     default: 0
     range: [1, 19]
     value: None
   gravity:
-    enabled: no
+    enabled: tes
     default: -10
     range: [ -15, -5 ]
     value: None
   random_start_position:
-    enabled: no
+    enabled: yes
     default: [ 300, 400 ]
     x_range: [ 0, 550 ]
     y_range: [ 400, 401 ]
