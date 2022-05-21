@@ -31,6 +31,8 @@ class Agent:
         else:
             self.model = pre_trained_model
 
+        print(self.model.summary())
+
     def build_quad_timestep_model(self):
         layers = self.config['network']['layers']
         learning_rate = self.config['network']['learning_rate']

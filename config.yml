@@ -4,20 +4,20 @@ general:
   save_results: yes
   render_training: no
   render_evaluation: no
-  verbose: no
+  verbose: yes
 uncertainty:
   wind:
-    enabled: no
+    enabled: yes
     default: 0
     range: [1, 19]
     value: None
   gravity:
-    enabled: no
+    enabled: yes
     default: -10
     range: [ -15, -5 ]
     value: None
   random_start_position:
-    enabled: no
+    enabled: yes
     default: [ 300, 400 ]
     x_range: [ 0, 550 ]
     y_range: [ 400, 401 ]
@@ -49,5 +49,5 @@ save_location: ../models/
 memory:
   size: 1000000
 evaluation_episodes: 1
-best_score: -200
-robust_test_threshold: -200
+best_score: 200
+robust_test_threshold: 200

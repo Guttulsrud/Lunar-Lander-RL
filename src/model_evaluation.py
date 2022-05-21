@@ -1,5 +1,5 @@
-from utils import get_config, load_model
-from custom_lunar_lander import LunarLander
+from utils import get_config, load_model, one_hot
+from new_custom_lunar_lander import LunarLander
 from random import randrange
 import numpy as np
 
@@ -10,27 +10,42 @@ def evaluate_agent(agent, render=True, verbose=True):
 
     episode_scores = []
     for episode in range(100):
-        #gravity_low = config['uncertainty']['gravity_range'][1]
-        #gravity_high = config['uncertainty']['gravity_range'][0]
-
- #       config['uncertainty']['gravity'] = randrange(-7, -5)
-        # config['uncertainty']['gravity'] = randrange(gravity_low, gravity_high)
-        #print('Gravity: ', config['uncertainty']['gravity'])
-        pos = [randrange(0, 550), 0]
+        pos = [randrange(0, 550), 400]
+        grav = randrange(-15, -5)
+        wind = randrange(1, 19)
         config['uncertainty']['random_start_position']['value'] = pos
-        print('Position: ', pos)
+        config['uncertainty']['gravity']['value'] = grav
+        config['uncertainty']['wind']['value'] = wind
 
         environment = LunarLander(config)
 
         observation = environment.reset()
+        timesteps = 4
+
+        observations = [observation for _ in range(timesteps)]
+        actions = [[0, 0, 0, 0] for _ in range(timesteps - 1)]
+
+        next_observations_and_actions = np.append(observations, actions)
         score = 0.0
 
         for step in range(config['max_steps']):
-            prediction = agent.predict(observation[np.newaxis, :])
+
+            observations_and_actions = next_observations_and_actions
+
+            prediction = agent.predict(observations_and_actions[np.newaxis, :])
             action = np.argmax(prediction)
+
             next_observation, reward, done, info = environment.step(action)
+
+            observations = np.roll(observations, shift=1, axis=0)
+            observations[0] = next_observation
+
+            actions = np.roll(actions, shift=1, axis=0)
+            actions[0] = one_hot(action)
+
+            next_observations_and_actions = np.append(observations, actions)
+
             score += reward
-            observation = next_observation
             if render:
                 environment.render()
 
@@ -49,5 +64,5 @@ def evaluate_agent(agent, render=True, verbose=True):
 
 
 if __name__ == '__main__':
-    model = load_model(path='22-05-12_12-27_SCORE_281')
+    model = load_model(path='22-05-21_16-27_SCORE_-37')
     evaluate_agent(agent=model)

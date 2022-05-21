@@ -7,7 +7,7 @@ import seaborn as sns
 
 def plot_results(file_name):
     # plt.style.use('ggplot')
-    window_size = 40
+    window_size = 10
     sns.set_style('white')
     sns.set_context("paper", font_scale=1)
 
