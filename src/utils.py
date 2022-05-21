@@ -46,9 +46,15 @@ def get_config():
     elif config['general']['model_type'] == MODEL_TYPE.DOUBLE:
         config['input_dimensions'] = 17
     elif config['general']['model_type'] == MODEL_TYPE.MULTI:
-        config['input_dimensions'] = 35
+        config['input_dimensions'] = 44
 
     return config
+
+
+def one_hot(value, classes=4):
+    output = np.zeros(classes)
+    output[value] = 1
+    return output
 
 
 def evaluate_multi_agent(environment, agent, config, episodes, timesteps=4):
@@ -59,7 +65,7 @@ def evaluate_multi_agent(environment, agent, config, episodes, timesteps=4):
         current_observation = environment.reset()
 
         observations = [current_observation for _ in range(timesteps)]
-        actions = [0 for _ in range(timesteps - 1)]
+        actions = [[0, 0, 0, 0] for _ in range(timesteps - 1)]
 
         next_observations_and_actions = np.append(observations, actions)
 
@@ -68,15 +74,15 @@ def evaluate_multi_agent(environment, agent, config, episodes, timesteps=4):
         for step in range(config['max_steps']):
 
             observations_and_actions = next_observations_and_actions
-
             action = agent.choose_action(observations_and_actions, policy='exploit')
 
             next_observation, reward, done, info = environment.step(action)
 
-            observations = np.roll(observations, shift=-1, axis=0)
-            actions = np.roll(actions, shift=-1)
-            observations[-1] = next_observation
-            actions[-1] = action
+            observations = np.roll(observations, shift=1, axis=0)
+            observations[0] = next_observation
+
+            actions = np.roll(actions, shift=1, axis=0)
+            actions[0] = one_hot(action)
             next_observations_and_actions = np.append(observations, actions)
 
             score += reward

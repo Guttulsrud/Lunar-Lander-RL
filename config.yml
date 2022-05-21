@@ -7,26 +7,28 @@ general:
   verbose: no
 uncertainty:
   wind:
-    enabled: yes
+    enabled: no
     default: 0
     range: [1, 19]
     value: None
   gravity:
-    enabled: tes
+    enabled: no
     default: -10
     range: [ -15, -5 ]
     value: None
   random_start_position:
-    enabled: yes
+    enabled: no
     default: [ 300, 400 ]
     x_range: [ 0, 550 ]
     y_range: [ 400, 401 ]
     value: None
 network:
   layers:
-    - nodes: 256
+    - nodes: 128
       activation: relu
-    - nodes: 256
+    - nodes: 128
+      activation: relu
+    - nodes: 128
       activation: relu
     - nodes: 4
       activation: linear
