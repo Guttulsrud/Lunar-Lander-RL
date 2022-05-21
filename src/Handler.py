@@ -6,7 +6,7 @@ import requests
 import numpy as np
 
 from Agent import Agent
-from utils import get_config, evaluate_double_agent, evaluate_single_agent, MODEL_TYPE, evaluate_agent
+from utils import get_config, evaluate_double_agent, evaluate_single_agent, MODEL_TYPE, evaluate_agent, one_hot
 # os.environ["CUDA_VISIBLE_DEVICES"] = "-1" #Disables GPU
 from new_custom_lunar_lander import LunarLander
 
@@ -25,10 +25,6 @@ class Handler:
         self.environment = None
         self.best_score = self.config['best_score']
 
-        for x in os.listdir('../models'):
-            if int(x.split('SCORE_')[1]) > self.best_score:
-                self.best_score = int(x.split('SCORE_')[1])
-
         if self.config['general']['save_results']:
             self.create_result_file()
 
@@ -40,7 +36,7 @@ class Handler:
             elif self.config['general']['model_type'] == MODEL_TYPE.DOUBLE:
                 self.run_double_episode(episode)
             elif self.config['general']['model_type'] == MODEL_TYPE.MULTI:
-                self.run_quad_episode(episode)
+                self.run_multi_episode(episode)
 
     def reload_config(self):
         self.config = get_config()
@@ -152,7 +148,7 @@ class Handler:
         if self.config['general']['save_results']:
             self.save_results_to_file(episode=episode, avg=avg, scores=scores)
 
-    def run_quad_episode(self, episode, timesteps=4):
+    def run_multi_episode(self, episode, timesteps=4):
         self.reload_config()
         self.determine_uncertainties()
         self.environment = LunarLander(self.config)
@@ -160,7 +156,7 @@ class Handler:
         current_observation = self.environment.reset()
 
         observations = [current_observation for _ in range(timesteps)]
-        actions = [-0.66 for _ in range(timesteps - 1)]
+        actions = [[0, 0, 0, 0] for _ in range(timesteps - 1)]
 
         next_observations_and_actions = np.append(observations, actions)
 
@@ -169,19 +165,25 @@ class Handler:
         for step in range(self.config['max_steps']):
             if self.config['general']['render_training']:
                 self.environment.render()
+
             observations_and_actions = next_observations_and_actions
+
             action = self.agent.choose_action(observations_and_actions)
             next_observation, reward, done, info = self.environment.step(action)
+
             score += reward
 
-            observations = np.roll(observations, shift=-1, axis=0)
-            actions = np.roll(actions, shift=-1)
-            observations[-1] = next_observation
-            actions[-1] = action
+            observations = np.roll(observations, shift=1, axis=0)
+            observations[0] = next_observation
+
+            actions = np.roll(actions, shift=1, axis=0)
+            actions[0] = one_hot(action)
 
             next_observations_and_actions = np.append(observations, actions)
 
-            self.agent.remember(observations_and_actions, action, reward, next_observations_and_actions, done)
+            if step > 3:
+                self.agent.remember(observations_and_actions, action, reward, next_observations_and_actions, done)
+
             self.agent.learn()
 
             if done:

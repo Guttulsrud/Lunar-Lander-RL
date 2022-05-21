@@ -40,7 +40,7 @@ def plot_results(file_name):
     # plt.plot(r2['rolling_average'], label='Position', color='orange')
     # plt.plot(r3['rolling_average'], label='Wind', color='green')
     ax = sns.lineplot(r['average_return'])
-    ax.set_ylim(-700, 400)
+    # ax.set_ylim(-400, 400)
     ax.axhline(200, color='red')
     ax.axhline(0, color='pink')
     ax.axhline(100, color='green')
@@ -66,7 +66,8 @@ def plot_results(file_name):
 
 
 if __name__ == '__main__':
-    file_name = os.listdir('../results')[1]
+    # file_name = os.listdir('../results')[-4]
+    file_name = os.listdir('../results')[-1]
     # file_name2 = os.listdir('../results')[1]
     # file_name3 = os.listdir('../results')[2]
 
