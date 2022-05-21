@@ -24,12 +24,25 @@ class Agent:
                 self.build_naive_model()
             elif self.config['general']['model_type'] == MODEL_TYPE.DOUBLE:
                 self.build_double_timestep_model()
-            elif self.config['general']['model_type'] == MODEL_TYPE.LSTM:
-                self.build_sequential_model()
+            elif self.config['general']['model_type'] == MODEL_TYPE.MULTI:
+                self.build_quad_timestep_model()
             else:
                 raise Exception('Invalid model type!')
         else:
             self.model = pre_trained_model
+
+    def build_quad_timestep_model(self):
+        layers = self.config['network']['layers']
+        learning_rate = self.config['network']['learning_rate']
+        loss_function = self.config['network']['loss_function']
+        self.model = Sequential()
+
+        self.model.add(Input(shape=(self.config['input_dimensions'],)))
+
+        for layer in layers:
+            self.model.add(Dense(layer['nodes'], activation=layer['activation']))
+
+        self.model.compile(loss=loss_function, optimizer=Adam(learning_rate))
 
     def build_double_timestep_model(self):
         layers = self.config['network']['layers']

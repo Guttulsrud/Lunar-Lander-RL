@@ -1,31 +1,32 @@
 ---
 general:
-  model_type: double
+  model_type: multi
   save_results: yes
   render_training: no
-  render_evaluation: no
+  render_evaluation: yes
+  verbose: no
 uncertainty:
   wind:
-    enabled: yes
+    enabled: no
     default: 0
     range: [1, 19]
     value: None
   gravity:
-    enabled: yes
+    enabled: no
     default: -10
     range: [ -15, -5 ]
     value: None
   random_start_position:
-    enabled: yes
+    enabled: no
     default: [ 300, 400 ]
     x_range: [ 0, 550 ]
     y_range: [ 400, 401 ]
     value: None
 network:
   layers:
-    - nodes: 128
+    - nodes: 256
       activation: relu
-    - nodes: 128
+    - nodes: 256
       activation: relu
     - nodes: 4
       activation: linear
@@ -38,14 +39,13 @@ training:
     min: 0.01
     max: 0.2
     change: 1
-number_of_episodes: 350
-max_steps: 1000
-input_dimensions: 17
+number_of_episodes: 1000
+max_steps: 500
 number_of_actions: 4
 gamma: 0.99
 save_location: ../models/
 memory:
   size: 1000000
 evaluation_episodes: 1
-best_score: 200
-robust_test_threshold: 200
+best_score: -200
+robust_test_threshold: -200

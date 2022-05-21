@@ -39,8 +39,8 @@ class Handler:
                 self.run_single_episode(episode)
             elif self.config['general']['model_type'] == MODEL_TYPE.DOUBLE:
                 self.run_double_episode(episode)
-            elif self.config['general']['model_type'] == MODEL_TYPE.LSTM:
-                self.run_lstm(episode)
+            elif self.config['general']['model_type'] == MODEL_TYPE.MULTI:
+                self.run_quad_episode(episode)
 
     def reload_config(self):
         self.config = get_config()
@@ -139,7 +139,7 @@ class Handler:
         avg, scores = self.simulate()
         print('Agent got average return on simple evaluation: ', avg)
 
-        if avg > self.config['robust_test_threshold']:
+        if avg > self.config['robust_test_threshold'] and avg > self.best_score:
             print('Agent received score above threshold')
             avg, scores = self.simulate(robust=True)
             print(f'Agent received score of {avg} on robust test')
@@ -151,6 +151,43 @@ class Handler:
 
         if self.config['general']['save_results']:
             self.save_results_to_file(episode=episode, avg=avg, scores=scores)
+
+    def run_quad_episode(self, episode, timesteps=4):
+        self.reload_config()
+        self.determine_uncertainties()
+        self.environment = LunarLander(self.config)
+
+        current_observation = self.environment.reset()
+
+        observations = [current_observation for _ in range(timesteps)]
+        actions = [-0.66 for _ in range(timesteps - 1)]
+
+        next_observations_and_actions = np.append(observations, actions)
+
+        for step in range(self.config['max_steps']):
+            if self.config['general']['render_training']:
+                self.environment.render()
+            observations_and_actions = next_observations_and_actions
+            print(observations_and_actions)
+            action = self.agent.choose_action(observations_and_actions)
+            print(action)
+            next_observation, reward, done, info = self.environment.step(action)
+
+            observations = np.roll(observations, shift=-1)
+            actions = np.roll(actions, shift=-1)
+            observations[-1] = next_observation
+            actions[-1] = action
+
+
+            next_observations_and_actions = np.append(observations, actions)
+
+            self.agent.remember(observations_and_actions, action, reward, next_observations_and_actions, done)
+            self.agent.learn()
+
+            if done:
+                break
+
+        self.evaluate(episode)
 
     def run_double_episode(self, episode):
         self.reload_config()
@@ -221,7 +258,6 @@ class Handler:
                     'uncertainty': self.config['uncertainty'],
                 })
 
-        print(results)
         with open(f'../results/{self.created_at}.json', 'w') as f:
             json.dump(results, f)
 

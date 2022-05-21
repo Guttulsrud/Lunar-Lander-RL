@@ -173,15 +173,15 @@ class LunarLander(gym.Env, EzPickle):
     def __init__(
         self,
         config: dict,
-        continuous: bool = False,
-    ):
+        continuous: bool = False    ):
 
         start_position = config['uncertainty']['random_start_position']['value']
         gravity = config['uncertainty']['gravity']['value']
         enable_wind = config['uncertainty']['wind']['enabled']
         wind_power = config['uncertainty']['wind']['value']
 
-        print(f'Constructing LunarLander environment with gravity: {gravity}, position: {start_position}, wind: {wind_power}')
+        if config['general']['verbose']:
+            print(f'Constructing LunarLander environment with gravity: {gravity}, position: {start_position}, wind: {wind_power}')
 
         EzPickle.__init__(self)
 

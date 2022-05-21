@@ -34,7 +34,7 @@ def load_model(path):
 class MODEL_TYPE:
     SINGLE = 'single'
     DOUBLE = 'double'
-    LSTM = 'lstm'
+    MULTI = 'multi'
 
 
 def get_config():
@@ -45,10 +45,52 @@ def get_config():
         config['input_dimensions'] = 8
     elif config['general']['model_type'] == MODEL_TYPE.DOUBLE:
         config['input_dimensions'] = 17
-    elif config['general']['model_type'] == MODEL_TYPE.LSTM:
-        config['input_dimensions'] = 17
+    elif config['general']['model_type'] == MODEL_TYPE.MULTI:
+        config['input_dimensions'] = 35
 
     return config
+
+
+def evaluate_multi_agent(environment, agent, config, episodes, timesteps=4):
+    episode_scores = []
+
+    for episode in range(episodes):
+
+        current_observation = environment.reset()
+
+        observations = [current_observation for _ in range(timesteps)]
+        actions = [0 for _ in range(timesteps - 1)]
+
+        next_observations_and_actions = np.append(observations, actions)
+
+        score = 0.0
+
+        for step in range(config['max_steps']):
+
+            observations_and_actions = next_observations_and_actions
+
+            action = agent.choose_action(observations_and_actions, policy='exploit')
+
+            next_observation, reward, done, info = environment.step(action)
+
+            observations = np.roll(observations, shift=-1)
+            actions = np.roll(actions, shift=-1)
+            observations[-1] = next_observation
+            actions[-1] = action
+            next_observations_and_actions = np.append(observations, actions)
+
+            score += reward
+            if config['general']['render_evaluation']:
+                environment.render()
+
+            if done:
+                break
+
+        episode_scores.append(score)
+
+    average_return = sum(episode_scores) / config['evaluation_episodes']
+
+    return average_return, episode_scores
 
 
 def evaluate_double_agent(environment, agent, config, episodes, render=False):
@@ -103,6 +145,11 @@ def evaluate_agent(environment, agent, config, episodes):
                                      agent=agent,
                                      config=config,
                                      episodes=episodes)
+    elif config['general']['model_type'] == MODEL_TYPE.MULTI:
+        return evaluate_multi_agent(environment=environment,
+                                    agent=agent,
+                                    config=config,
+                                    episodes=episodes)
 
 
 def evaluate_single_agent(environment, agent, config, episodes):
