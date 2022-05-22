@@ -1,34 +1,33 @@
 ---
 general:
-  model_type: multi
+  model_type: single
+  use_pre_trained_model: no
   save_results: yes
   render_training: no
   render_evaluation: no
   verbose: no
 uncertainty:
   wind:
-    enabled: no
+    enabled: yes
     default: 0
     range: [1, 19]
     value: None
   gravity:
-    enabled: no
+    enabled: yes
     default: -10
     range: [ -15, -5 ]
     value: None
   random_start_position:
-    enabled: no
+    enabled: yes
     default: [ 300, 400 ]
     x_range: [ 0, 550 ]
     y_range: [ 400, 401 ]
     value: None
 network:
   layers:
-    - nodes: 128
+    - nodes: 64
       activation: relu
-    - nodes: 128
-      activation: relu
-    - nodes: 128
+    - nodes: 64
       activation: relu
     - nodes: 4
       activation: linear
@@ -41,7 +40,7 @@ training:
     min: 0.01
     max: 0.2
     change: 1
-number_of_episodes: 1000
+number_of_episodes: 350
 max_steps: 500
 number_of_actions: 4
 gamma: 0.99

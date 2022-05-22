@@ -111,12 +111,8 @@ def evaluate_double_agent(environment, agent, config, episodes, render=False):
         score = 0.0
 
         for step in range(config['max_steps']):
-            # gravity = config['uncertainty']['gravity']['value']
-            # wind = config['uncertainty']['wind']['value']
             previous_and_current = np.append(previous_observation, current_observation)
             previous_and_current_observation = np.append(previous_and_current, previous_action)
-            # previous_and_current_observation = np.append(previous_and_current_observation, wind)
-            # previous_and_current_observation = np.append(previous_and_current_observation, gravity)
 
             action = agent.choose_action(previous_and_current_observation, policy='exploit')
 
