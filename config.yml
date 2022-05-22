@@ -5,7 +5,7 @@ general:
   save_results: yes
   render_training: no
   render_evaluation: no
-  verbose: no
+  verbose: yes
 uncertainty:
   wind:
     enabled: yes
@@ -48,5 +48,5 @@ save_location: ../models/
 memory:
   size: 1000000
 evaluation_episodes: 1
-best_score: -200
-robust_test_threshold: -200
+best_score: 200
+robust_test_threshold: 200

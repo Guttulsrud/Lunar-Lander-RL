@@ -130,6 +130,8 @@ class TrainingHandler:
         avg, scores = self.simulate()
         print('Agent got average return on simple evaluation: ', avg)
 
+        self.agent.save_model(score=avg)
+
         if avg > self.config['robust_test_threshold'] and avg > self.best_score:
             print('Agent received score above threshold')
             avg, scores = self.simulate(robust=True)
@@ -138,7 +140,6 @@ class TrainingHandler:
             if avg > self.best_score:
                 print('Agent is new best. Saving model')
                 self.best_score = avg
-                self.agent.save_model(score=avg)
 
         if self.config['general']['save_results']:
             self.save_results_to_file(episode=episode, avg=avg, scores=scores)
