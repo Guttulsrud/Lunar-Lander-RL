@@ -21,14 +21,14 @@
 
 ### Pre-trained model
 
-1. Open `test.py`
+1. Open `src/test.py`
 2. Change the `path_to_model` variable to the name of a model in the `saved_models` folder.
 3. Make sure `model_type` is configured correctly in the config file.
 4. Run the file.
 
 ### Train new model
 
-1. Open`main.py`.
+1. Open`src/main.py`.
 2. (Optional) Change the `dev_note` variable to describe the run.
 3. Run the file.
 
