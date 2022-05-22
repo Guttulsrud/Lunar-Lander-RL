@@ -1,10 +1,9 @@
 ---
 general:
-  model_type: single
-  use_pre_trained_model: no
+  model_type: multi #Pick from: single, double, multi
   save_results: yes
   render_training: no
-  render_evaluation: no
+  render_evaluation: yes
   verbose: yes
 uncertainty:
   wind:
@@ -41,12 +40,12 @@ training:
     max: 0.2
     change: 1
 number_of_episodes: 350
-max_steps: 500
+max_steps: 1000
 number_of_actions: 4
 gamma: 0.99
-save_location: ../models/
+save_location: ../saved_models/
 memory:
   size: 1000000
 evaluation_episodes: 1
-best_score: 200
+best_score: -200
 robust_test_threshold: 200

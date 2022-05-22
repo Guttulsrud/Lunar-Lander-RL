@@ -1,5 +1,5 @@
 from utils import get_config, load_model, one_hot
-from new_custom_lunar_lander import LunarLander
+from custom_lunar_lander_environment import LunarLander
 from random import randrange
 import numpy as np
 

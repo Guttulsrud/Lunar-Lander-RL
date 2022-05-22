@@ -7,12 +7,13 @@ import numpy as np
 
 from Agent import Agent
 from utils import get_config, MODEL_TYPE, evaluate_agent, one_hot
-from new_custom_lunar_lander import LunarLander
+from custom_lunar_lander_environment import LunarLander
 
 
 class TrainingHandler:
-    def __init__(self, dev_note, pre_trained_model=None):
-        self.config = get_config()
+    def __init__(self, dev_note='', pre_trained_model=None, testing=False):
+        self.testing = testing
+        self.config = get_config(testing)
         self.dev_note = dev_note
         self.agent = Agent(config=self.config, pre_trained_model=pre_trained_model)
 
@@ -159,6 +160,9 @@ class TrainingHandler:
         score = 0.0
 
         for step in range(self.config['max_steps']):
+            if self.testing:
+                break
+
             if self.config['general']['render_training']:
                 self.environment.render()
 
@@ -177,9 +181,7 @@ class TrainingHandler:
 
             next_observations_and_actions = np.append(observations, actions)
 
-            if step > 3:
-                self.agent.remember(observations_and_actions, action, reward, next_observations_and_actions, done)
-
+            self.agent.remember(observations_and_actions, action, reward, next_observations_and_actions, done)
             self.agent.learn()
 
             if done:
@@ -197,6 +199,9 @@ class TrainingHandler:
         previous_action = 0
 
         for step in range(self.config['max_steps']):
+            if self.testing:
+                break
+
             if self.config['general']['render_training']:
                 self.environment.render()
 
@@ -209,12 +214,11 @@ class TrainingHandler:
             current_and_next_observation = np.append(current_and_next, action)
 
             self.agent.remember(previous_and_current_observation, action, reward, current_and_next_observation, done)
+            self.agent.learn()
 
             previous_observation = current_observation
             current_observation = next_observation
             previous_action = action
-
-            self.agent.learn()
 
             if done:
                 break
@@ -228,8 +232,9 @@ class TrainingHandler:
 
         observation = self.environment.reset()
 
-        print(f'Training..')
         for step in range(self.config['max_steps']):
+            if self.testing:
+                break
             if self.config['general']['render_training']:
                 self.environment.render()
 
@@ -237,8 +242,9 @@ class TrainingHandler:
             next_observation, reward, done, info = self.environment.step(action)
 
             self.agent.remember(observation, action, reward, next_observation, done)
-            observation = next_observation
             self.agent.learn()
+
+            observation = next_observation
 
             if done:
                 break

@@ -21,7 +21,7 @@ def plot_results(file_name):
     ax = sns.lineplot(r['average_return'])
     ax.axhline(200, color='red')
     ax.axhline(0, color='green')
-    plt.ylim(-2000, 400)
+    # plt.ylim(-2000, 400)
     plt.legend(loc='upper right', labels=['Score', 'Success'])
     ax.set(title=dev_note)
     ax.set(xlabel='Episodes', ylabel='Score')
@@ -37,5 +37,5 @@ def plot_results(file_name):
 
 
 if __name__ == '__main__':
-    file_name = os.listdir('../results')[1]
+    file_name = os.listdir('../results')[-1]
     plot_results(file_name)
