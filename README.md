@@ -17,7 +17,7 @@
 ## How to run
 
 * Make sure to check out the config file if you wish to customize the training, model, etc.
-* Rendering of training/evaluation is turned off by default. May be turned on in config file.
+* Rendering of training is turned off by default. May be turned on in config file.
 
 ### Pre-trained model
 

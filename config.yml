@@ -1,6 +1,6 @@
 ---
 general:
-  model_type: multi #Pick from: single, double, multi
+  model_type: single #Pick from: single, double, multi
   save_results: yes
   render_training: no
   render_evaluation: yes

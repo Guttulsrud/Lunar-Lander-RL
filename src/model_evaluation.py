@@ -64,5 +64,5 @@ def evaluate_agent(agent, render=True, verbose=True):
 
 
 if __name__ == '__main__':
-    model = load_model(path='multi4x512 score_217')
+    model = load_model(path='')
     evaluate_agent(agent=model)

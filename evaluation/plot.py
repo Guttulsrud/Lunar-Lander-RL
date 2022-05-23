@@ -37,5 +37,5 @@ def plot_results(file_name):
 
 
 if __name__ == '__main__':
-    file_name = os.listdir('../results')[-1]
+    file_name = os.listdir('../results')[-1]  # Plot the latest result
     plot_results(file_name)
