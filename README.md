@@ -1,4 +1,4 @@
-### Solving the Lunar Lander environment with multiple uncertainties using Reinforcement Learningand Deep Q Learning
+### Solving the Lunar Lander environment with multiple uncertainties using Reinforcement Learning and Deep Q Learning
 
 ## Installation
 
