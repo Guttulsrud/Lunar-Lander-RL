@@ -2,7 +2,6 @@ import json
 import os
 from random import randrange
 from datetime import datetime
-import requests
 import numpy as np
 
 from Agent import Agent
@@ -264,8 +263,6 @@ class TrainingHandler:
 
         with open(f'../results/{self.created_at}.json', 'w') as f:
             json.dump(results, f)
-
-        # requests.post('http://localhost:5000/send', json={"data": avg, "title": self.dev_note, "training": False})
 
     def create_result_file(self):
 
