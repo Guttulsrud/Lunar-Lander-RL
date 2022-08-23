@@ -14,8 +14,9 @@ def plot_results(file_name):
         r = json.load(f)
 
     dev_note = r['note']
+    # r['results'] = r['results'][150:350]
     r = pd.json_normalize(r['results'])
-    r['rolling_average'] = r['average_return'].rolling(window=window_size).mean()
+    # r['rolling_average'] = r['average_return'].rolling(window=window_size).mean()
 
     plt.plot(r['average_return'], label='Score')
     ax = sns.lineplot(r['average_return'])
@@ -33,9 +34,9 @@ def plot_results(file_name):
     if not os.path.isdir('plots'):
         os.mkdir('plots')
 
-    fig.savefig(f'plots/{dev_note}.png')
+    fig.savefig(f'plots/{dev_note}.svg')
 
 
 if __name__ == '__main__':
-    file_name = os.listdir('../results')[-1]  # Plot the latest result
+    file_name = os.listdir('../results')[4]  # Plot the latest result
     plot_results(file_name)

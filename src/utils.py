@@ -47,7 +47,7 @@ def get_config(testing=False):
     elif config['general']['model_type'] == MODEL_TYPE.DOUBLE:
         config['input_dimensions'] = 17
     elif config['general']['model_type'] == MODEL_TYPE.MULTI:
-        config['input_dimensions'] = 44
+        config['input_dimensions'] = 92
 
     if testing:
         config['general']['verbose'] = True
@@ -62,7 +62,7 @@ def one_hot(value, classes=4):
     return output
 
 
-def evaluate_multi_agent(environment, agent, config, episodes, timesteps=4):
+def evaluate_multi_agent(environment, agent, config, episodes, timesteps=8):
     episode_scores = []
 
     for episode in range(episodes):

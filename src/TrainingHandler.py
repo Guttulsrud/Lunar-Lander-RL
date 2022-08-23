@@ -130,7 +130,8 @@ class TrainingHandler:
         avg, scores = self.simulate()
         print('Agent got average return on simple evaluation: ', avg)
 
-        self.agent.save_model(score=avg)
+        if avg > 100:
+            self.agent.save_model(score=avg)
 
         if avg > self.config['robust_test_threshold'] and avg > self.best_score:
             print('Agent received score above threshold')
@@ -144,7 +145,7 @@ class TrainingHandler:
         if self.config['general']['save_results']:
             self.save_results_to_file(episode=episode, avg=avg, scores=scores)
 
-    def run_multi_episode(self, episode, timesteps=4):
+    def run_multi_episode(self, episode, timesteps=8):
         self.reload_config()
         self.determine_uncertainties()
         self.environment = LunarLander(self.config)

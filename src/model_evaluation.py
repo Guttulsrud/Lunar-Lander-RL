@@ -20,7 +20,7 @@ def evaluate_agent(agent, render=True, verbose=True):
         environment = LunarLander(config)
 
         observation = environment.reset()
-        timesteps = 4
+        timesteps = 8
 
         observations = [observation for _ in range(timesteps)]
         actions = [[0, 0, 0, 0] for _ in range(timesteps - 1)]
@@ -64,5 +64,5 @@ def evaluate_agent(agent, render=True, verbose=True):
 
 
 if __name__ == '__main__':
-    model = load_model(path='')
+    model = load_model(path='22-08-23_05-32_SCORE_254')
     evaluate_agent(agent=model)
