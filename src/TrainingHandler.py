@@ -144,7 +144,7 @@ class TrainingHandler:
         if self.config['general']['save_results']:
             self.save_results_to_file(episode=episode, avg=avg, scores=scores)
 
-    def run_multi_episode(self, episode, timesteps=4):
+    def run_multi_episode(self, episode, timesteps=6):
         self.reload_config()
         self.determine_uncertainties()
         self.environment = LunarLander(self.config)
