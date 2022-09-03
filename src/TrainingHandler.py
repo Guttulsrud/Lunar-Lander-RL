@@ -6,7 +6,7 @@ from datetime import datetime
 import numpy as np
 
 from Agent import Agent
-from utils import get_config, MODEL_TYPE, evaluate_agent, one_hot
+from utils import get_config, MODEL_TYPE, evaluate_agent, one_hot, memoize
 from custom_lunar_lander_environment import LunarLander
 
 
@@ -69,6 +69,7 @@ class TrainingHandler:
         else:
             self.config['uncertainty']['wind']['value'] = wind['default']
 
+    @memoize
     def determine_evaluation_uncertainties(self, mode):
 
         wind_range = self.config['uncertainty']['wind']['range']
@@ -100,14 +101,8 @@ class TrainingHandler:
 
         scores = []
         uncertainty_combinations = self.determine_evaluation_uncertainties(mode)
-        print(uncertainty_combinations)
 
         for wind, gravity, start_position in uncertainty_combinations:
-
-            if self.config['general']['verbose']:
-                print(
-                    f'Constructing LunarLander environment with gravity: {gravity}, position: {start_position}, wind: {wind}')
-
             self.environment = LunarLander(wind_power=wind, gravity=gravity, start_position=start_position)
 
             score = evaluate_agent(environment=self.environment,
@@ -124,12 +119,16 @@ class TrainingHandler:
         simple_eval_scores = self.evaluate(mode='simple')
         score = np.average(simple_eval_scores)
 
+        print(f'Received average score of {score} on simple evaluation')
+
         robust_eval_scores = [0]  # ensures that we can do avg
 
         if self.config['robust_test_threshold'] < score:
             robust_eval_scores = self.evaluate(mode='robust')
             robust_eval_scores.append(*simple_eval_scores)
             score = np.average(robust_eval_scores)
+
+            print(f'Received average score of {score} on robust evaluation')
 
         if self.config['general']['save_results']:
             self.agent.save_model(score=score)

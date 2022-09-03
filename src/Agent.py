@@ -64,7 +64,7 @@ class Agent:
         current = current[np.newaxis, :]
         random_chance = np.random.uniform(0, 1)
         if random_chance > self.exploration_rate or policy == 'exploit':
-            prediction = self.model.predict(current)
+            prediction = self.model.predict(current, verbose=0)
             action = np.argmax(prediction)
         else:
             action = np.random.choice(self.action_space)
@@ -81,8 +81,8 @@ class Agent:
         action_indices = np.dot(action, action_values)
         action_indices = [int(x) for x in action_indices]
 
-        q_eval = self.model.predict(state)
-        q_next = self.model.predict(next_state)
+        q_eval = self.model.predict(state, verbose=0)
+        q_next = self.model.predict(next_state, verbose=0)
 
         q_target = q_eval.copy()
 

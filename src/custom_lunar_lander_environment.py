@@ -177,6 +177,9 @@ class LunarLander(gym.Env, EzPickle):
 
         EzPickle.__init__(self)
 
+        print(
+            f'Constructing LunarLander environment with  wind: {wind_power}, gravity: {gravity}, position: {start_position}')
+
         # assert (
         #     -12.0 < gravity and gravity < 0.0
         # ), f"gravity (current value: {gravity}) must be between -12 and 0"

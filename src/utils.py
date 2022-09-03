@@ -60,6 +60,17 @@ def one_hot(value, classes=4):
     return output
 
 
+def memoize(f):
+    memo = {}
+
+    def helper(x):
+        if x not in memo:
+            memo[x] = f(x)
+        return memo[x]
+
+    return helper
+
+
 def evaluate_multi_agent(environment, agent, config):
     current_observation = environment.reset()
 
@@ -75,7 +86,6 @@ def evaluate_multi_agent(environment, agent, config):
     for step in range(config['max_steps']):
         observations_and_actions = next_observations_and_actions
         action = agent.choose_action(observations_and_actions, policy='exploit')
-
         next_observation, reward, done, info = environment.step(action)
 
         observations = np.roll(observations, shift=1, axis=0)
@@ -108,7 +118,6 @@ def evaluate_agent(environment, agent, config):
 
 
 def evaluate_single_agent(environment, agent, config):
-
     observation = environment.reset()
     score = 0.0
 
