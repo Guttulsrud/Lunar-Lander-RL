@@ -1,15 +1,15 @@
 ---
 general:
-  model_type: single #Pick from: single, double, multi
+  model_type: multi #Pick from: single, multi
   save_results: yes
   render_training: no
-  render_evaluation: yes
+  render_evaluation: no
   verbose: yes
 uncertainty:
   wind:
     enabled: yes
     default: 0
-    range: [1, 19]
+    range: [ 1, 19 ]
     value: None
   gravity:
     enabled: yes
@@ -34,6 +34,7 @@ network:
   optimizer: adam
   learning_rate: 0.001
 training:
+  timesteps: 6
   batch_size: 64
   epsilon:
     min: 0.01
@@ -46,6 +47,5 @@ gamma: 0.99
 save_location: ../saved_models/
 memory:
   size: 1000000
-evaluation_episodes: 1
 best_score: -200
 robust_test_threshold: 200

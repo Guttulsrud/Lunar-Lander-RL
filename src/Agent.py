@@ -22,10 +22,8 @@ class Agent:
         if not pre_trained_model:
             if self.config['general']['model_type'] == MODEL_TYPE.SINGLE:
                 self.build_naive_model()
-            elif self.config['general']['model_type'] == MODEL_TYPE.DOUBLE:
-                self.build_double_timestep_model()
             elif self.config['general']['model_type'] == MODEL_TYPE.MULTI:
-                self.build_quad_timestep_model()
+                self.build_multi_timestep_model()
             else:
                 raise Exception('Invalid model type!')
         else:
@@ -33,41 +31,16 @@ class Agent:
 
         print(self.model.summary())
 
-    def build_quad_timestep_model(self):
+    def build_multi_timestep_model(self):
         layers = self.config['network']['layers']
         learning_rate = self.config['network']['learning_rate']
         loss_function = self.config['network']['loss_function']
         self.model = Sequential()
 
-        self.model.add(Input(shape=(self.config['input_dimensions'],)))
+        self.model.add(Input(shape=(self.config['training']['input_shape'],)))
 
         for layer in layers:
             self.model.add(Dense(layer['nodes'], activation=layer['activation']))
-
-        self.model.compile(loss=loss_function, optimizer=Adam(learning_rate))
-
-    def build_double_timestep_model(self):
-        layers = self.config['network']['layers']
-        learning_rate = self.config['network']['learning_rate']
-        loss_function = self.config['network']['loss_function']
-        self.model = Sequential()
-
-        self.model.add(Input(shape=(17,)))
-
-        for layer in layers:
-            self.model.add(Dense(layer['nodes'], activation=layer['activation']))
-
-        self.model.compile(loss=loss_function, optimizer=Adam(learning_rate))
-
-    def build_sequential_model(self):
-        learning_rate = self.config['network']['learning_rate']
-        loss_function = self.config['network']['loss_function']
-
-        self.model = Sequential()
-
-        self.model.add(LSTM(128, input_shape=(1, 17)), activation='tanh')
-        self.model.add(Dense(128, activation='relu'))
-        self.model.add(Dense(4, activation='linear'))
 
         self.model.compile(loss=loss_function, optimizer=Adam(learning_rate))
 
