@@ -7,12 +7,12 @@ general:
   verbose: no
 uncertainty:
   wind:
-    enabled: yes
+    enabled: no
     default: 0
     range: [ 1, 19 ]
     value: None
   gravity:
-    enabled: yes
+    enabled: no
     default: -10
     range: [ -15, -5 ]
     value: None
@@ -24,9 +24,9 @@ uncertainty:
     value: None
 network:
   layers:
-    - nodes: 64
+    - nodes: 128
       activation: relu
-    - nodes: 64
+    - nodes: 192
       activation: relu
     - nodes: 4
       activation: linear
@@ -40,12 +40,12 @@ training:
     min: 0.01
     max: 0.2
     change: 1
-number_of_episodes: 350
-max_steps: 1000
+number_of_episodes: 700
+max_steps: 200
 number_of_actions: 4
 gamma: 0.99
 save_location: ../saved_models/
 memory:
   size: 1000000
 best_score: -200
-robust_test_threshold: 200
+robust_test_threshold: -1500

@@ -146,7 +146,7 @@ class TrainingHandler(object):
 
         if self.config['robust_test_threshold'] < score:
             robust_eval_scores = self.evaluate(mode='robust')
-            robust_eval_scores.append(*simple_eval_scores)
+            robust_eval_scores += simple_eval_scores
             score = np.average(robust_eval_scores)
 
             print(f'Received average score of {score} on robust evaluation')

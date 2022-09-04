@@ -1,7 +1,7 @@
 import os
 
 import numpy as np
-from tensorflow.keras.layers import Dense, Input, LSTM
+from tensorflow.keras.layers import Dense, Input
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 from datetime import datetime
@@ -11,7 +11,8 @@ from utils import MODEL_TYPE
 
 
 class Agent:
-    def __init__(self, config, pre_trained_model):
+
+    def __init__(self, config, pre_trained_model=None):
         self.config = config
         self.exploration_rate = config['training']['epsilon']['max']
         self.exploration_rate_min = config['training']['epsilon']['min']
