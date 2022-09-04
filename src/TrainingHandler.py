@@ -10,7 +10,18 @@ from utils import get_config, MODEL_TYPE, evaluate_agent, one_hot, memoize
 from custom_lunar_lander_environment import LunarLander
 
 
-class TrainingHandler:
+def run_episode(wind, gravity, start_position, agent, config):
+    environment = LunarLander(wind_power=wind, gravity=gravity, start_position=start_position)
+
+    score = evaluate_agent(environment=environment,
+                           agent=agent,
+                           config=config)
+
+    return score
+
+
+class TrainingHandler(object):
+
     def __init__(self, dev_note='', pre_trained_model=None, testing=False):
         self.testing = testing
         self.config = get_config(testing)
@@ -23,6 +34,8 @@ class TrainingHandler:
 
         if self.config['general']['save_results']:
             self.create_result_file()
+
+        self.test = 1
 
     def run(self):
         for episode in range(self.config['number_of_episodes']):
@@ -37,21 +50,21 @@ class TrainingHandler:
 
     def determine_uncertainties(self):
         gravity = self.config['uncertainty']['gravity']
-        random_start_position = self.config['uncertainty']['random_start_position']
+        start_position = self.config['uncertainty']['start_position']
         wind = self.config['uncertainty']['wind']
 
         # Determine random start position for lander
-        if random_start_position['enabled']:
-            x_low = random_start_position['x_range'][0]
-            x_high = random_start_position['x_range'][1]
+        if start_position['enabled']:
+            x_low = start_position['x_range'][0]
+            x_high = start_position['x_range'][1]
 
-            y_low = random_start_position['y_range'][0]
-            y_high = random_start_position['y_range'][1]
+            y_low = start_position['y_range'][0]
+            y_high = start_position['y_range'][1]
 
-            self.config['uncertainty']['random_start_position']['value'] = randrange(x_low, x_high), randrange(y_low,
-                                                                                                               y_high)
+            self.config['uncertainty']['start_position']['value'] = randrange(x_low, x_high), randrange(y_low,
+                                                                                                        y_high)
         else:
-            self.config['uncertainty']['random_start_position']['value'] = random_start_position['default']
+            self.config['uncertainty']['start_position']['value'] = start_position['default']
         # Determine random start gravity of planet
         if gravity['enabled']:
             gravity_low = gravity['range'][0]
@@ -74,26 +87,37 @@ class TrainingHandler:
 
         wind_range = self.config['uncertainty']['wind']['range']
         gravity_range = self.config['uncertainty']['gravity']['range']
-        random_start_position_range = self.config['uncertainty']['random_start_position']['x_range']
+        start_position_range = self.config['uncertainty']['start_position']['x_range']
 
         if mode == 'simple':
             step = 1
             samples = 2
-
         elif mode == 'robust':
             step = 2
             samples = 5
-
         else:
             raise 'Missing Evaluation Mode (simple/robust)'
 
-        wind = np.round(np.linspace(wind_range[0], wind_range[1], samples + 2)[1:-1:step]).astype(int)
-        gravity = np.round(np.linspace(gravity_range[0], gravity_range[1], samples + 2)[1:-1:step]).astype(int)
-        start_position = np.round(
-            np.linspace(random_start_position_range[0], random_start_position_range[1], samples + 2)[1:-1:step]).astype(
-            int)
+        if self.config['uncertainty']['wind']['enabled']:
+            wind = np.round(np.linspace(wind_range[0], wind_range[1], samples + 2)[1:-1:step])
+        else:
+            wind = [self.config['uncertainty']['wind']['default']]
 
-        start_position = [(x, 400) for x in start_position]
+        if self.config['uncertainty']['gravity']['enabled']:
+            gravity = np.round(np.linspace(gravity_range[0], gravity_range[1], samples + 2)[1:-1:step])
+        else:
+            gravity = [self.config['uncertainty']['gravity']['default']]
+
+        if self.config['uncertainty']['start_position']['enabled']:
+            start_position = np.round(
+                np.linspace(start_position_range[0], start_position_range[1], samples + 2)[1:-1:step])
+            start_position = [(x, 400) for x in start_position]
+        else:
+            start_position = [self.config['uncertainty']['start_position']['default']]
+
+        wind = [int(x) for x in wind]
+        gravity = [int(x) for x in gravity]
+        start_position = [(int(x), y) for x, y in start_position]
 
         return list(itertools.product(wind, gravity, start_position))
 
@@ -103,13 +127,10 @@ class TrainingHandler:
         uncertainty_combinations = self.determine_evaluation_uncertainties(mode)
 
         for wind, gravity, start_position in uncertainty_combinations:
-            self.environment = LunarLander(wind_power=wind, gravity=gravity, start_position=start_position)
-
-            score = evaluate_agent(environment=self.environment,
-                                   agent=self.agent,
-                                   config=self.config)
-
+            score = run_episode(wind, gravity, start_position, self.agent, self.config)
             scores.append(score)
+
+        print(scores)
 
         return scores
 
@@ -142,9 +163,9 @@ class TrainingHandler:
 
         wind = self.config['uncertainty']['wind']['value']
         gravity = self.config['uncertainty']['gravity']['value']
-        random_start_position = self.config['uncertainty']['random_start_position']['value']
+        start_position = self.config['uncertainty']['start_position']['value']
 
-        self.environment = LunarLander(wind_power=wind, gravity=gravity, start_position=random_start_position)
+        self.environment = LunarLander(wind_power=wind, gravity=gravity, start_position=start_position)
         timesteps = self.config['training']['timesteps']
 
         current_observation = self.environment.reset()

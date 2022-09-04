@@ -4,7 +4,7 @@ general:
   save_results: yes
   render_training: no
   render_evaluation: no
-  verbose: yes
+  verbose: no
 uncertainty:
   wind:
     enabled: yes
@@ -16,7 +16,7 @@ uncertainty:
     default: -10
     range: [ -15, -5 ]
     value: None
-  random_start_position:
+  start_position:
     enabled: yes
     default: [ 300, 400 ]
     x_range: [ 0, 550 ]

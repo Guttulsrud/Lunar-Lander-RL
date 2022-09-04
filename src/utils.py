@@ -63,9 +63,9 @@ def one_hot(value, classes=4):
 def memoize(f):
     memo = {}
 
-    def helper(x):
+    def helper(self, x):
         if x not in memo:
-            memo[x] = f(x)
+            memo[x] = f(self, x)
         return memo[x]
 
     return helper
