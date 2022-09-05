@@ -1,18 +1,18 @@
 ---
 general:
-  model_type: multi #Pick from: single, multi
+  model_type: single #Pick from: single, multi
   save_results: yes
   render_training: no
   render_evaluation: no
   verbose: no
 uncertainty:
   wind:
-    enabled: no
+    enabled: yes
     default: 0
     range: [ 1, 19 ]
     value: None
   gravity:
-    enabled: no
+    enabled: yes
     default: -10
     range: [ -15, -5 ]
     value: None
@@ -26,7 +26,7 @@ network:
   layers:
     - nodes: 128
       activation: relu
-    - nodes: 192
+    - nodes: 128
       activation: relu
     - nodes: 4
       activation: linear
@@ -48,4 +48,4 @@ save_location: ../saved_models/
 memory:
   size: 1000000
 best_score: -200
-robust_test_threshold: -1500
+robust_test_threshold: 150
