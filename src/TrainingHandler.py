@@ -35,8 +35,6 @@ class TrainingHandler(object):
         if self.config['general']['save_results']:
             self.create_result_file()
 
-        self.test = 1
-
     def run(self):
         for episode in range(self.config['number_of_episodes']):
             print(f'\n----- EPISODE {episode}/{self.config["number_of_episodes"]} -----\n')
@@ -210,7 +208,11 @@ class TrainingHandler(object):
     def run_single_episode(self, episode):
         self.reload_config()
         self.determine_uncertainties()
-        self.environment = LunarLander(self.config)
+        wind = self.config['uncertainty']['wind']['value']
+        gravity = self.config['uncertainty']['gravity']['value']
+        start_position = self.config['uncertainty']['start_position']['value']
+
+        self.environment = LunarLander(wind_power=wind, gravity=gravity, start_position=start_position)
 
         observation = self.environment.reset()
 

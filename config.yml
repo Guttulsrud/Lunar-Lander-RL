@@ -35,7 +35,7 @@ network:
   learning_rate: 0.001
 training:
   timesteps: 6
-  batch_size: 64
+  batch_size: 16
   epsilon:
     min: 0.01
     max: 0.2

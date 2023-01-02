@@ -4,6 +4,7 @@ import numpy as np
 from tensorflow.keras.layers import Dense, Input
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
+import tensorflow as tf
 from datetime import datetime
 
 from ReplayBuffer import ReplayBuffer
@@ -80,19 +81,37 @@ class Agent:
 
         action_values = np.array(self.action_space, dtype=np.int8)
         action_indices = np.dot(action, action_values)
+        action = [int(x) for x in action_indices]
+
+        q_values = self.model.predict(state)
+        next_q_values = self.model.predict(next_state)
+        max_next_q_value = tf.reduce_max(next_q_values, axis=1)
+        target_q_value = reward + (1 - done) * max_next_q_value
+        current_q_value = q_values[:, action]
+        loss = tf.reduce_mean(tf.square(target_q_value - current_q_value))
+
+        self.model.fit(loss, self.model.trainable_variables)
+
+    def learn2(self):
+        if self.memory.memory_counter < self.batch_size:
+            # There is not enough training data yet to fill a batch
+            return
+
+        state, action, reward, next_state, done = self.memory.sample_batch(self.batch_size)
+
+        action_values = np.array(self.action_space, dtype=np.int8)
+        action_indices = np.dot(action, action_values)
         action_indices = [int(x) for x in action_indices]
 
         q_eval = self.model.predict(state, verbose=0)
         q_next = self.model.predict(next_state, verbose=0)
 
-        q_target = q_eval.copy()
-
         batch_index = np.arange(self.batch_size, dtype=np.int32)
 
         gradients = reward + self.config['gamma'] * np.max(q_next, axis=1) * (1 - done)
-        q_target[batch_index, action_indices] = gradients
+        q_eval[batch_index, action_indices] = gradients
 
-        self.model.fit(state, q_target, verbose=0)
+        self.model.fit(state, q_eval, verbose=0)
 
         if self.exploration_rate > self.exploration_rate_min:
             self.exploration_rate *= self.exploration_rate_decrement
