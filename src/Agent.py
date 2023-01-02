@@ -115,8 +115,9 @@ class Agent:
 
         batch_index = np.arange(self.batch_size, dtype=np.int32)
 
-        gradients = reward + self.config['gamma'] * np.max(q_next, axis=1) * (1 - done)
-        q_target[batch_index, action_indices] = gradients
+        # Update Q-values using the Bellman equation
+        for i in range(self.batch_size):
+            q_target[i, action_indices[i]] = reward[i] + self.config['gamma'] * np.max(q_next[i]) * (1 - done[i])
 
         self.model.fit(state, q_target, verbose=0)
 
