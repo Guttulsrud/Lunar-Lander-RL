@@ -3,6 +3,7 @@ import json
 import os
 import pandas as pd
 import seaborn as sns
+import numpy as np
 
 
 def plot_results(file_name):
@@ -13,12 +14,14 @@ def plot_results(file_name):
     with open(f'../results/{file_name}', 'r') as f:
         r = json.load(f)
 
-    dev_note = r['note']
-    r = pd.json_normalize(r['results'])
-    r['rolling_average'] = r['average_return'].rolling(window=window_size).mean()
+    results = [np.average(x['simple_eval_scores']) for x in r['results']]
 
-    plt.plot(r['average_return'], label='Score')
-    ax = sns.lineplot(r['average_return'])
+    dev_note = r['note']
+    # r = pd.json_normalize(r['results'])
+    # r['rolling_average'] = r['results'].rolling(window=window_size).mean()
+
+    plt.plot(results, label='Score')
+    ax = sns.lineplot(results)
     ax.axhline(200, color='red')
     ax.axhline(0, color='green')
     # plt.ylim(-2000, 400)

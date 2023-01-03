@@ -1,22 +1,22 @@
 ---
 general:
-  model_type: single #Pick from: single, double, multi
+  model_type: single #Pick from: single, multi
   save_results: yes
   render_training: no
   render_evaluation: no
-  verbose: yes
+  verbose: no
 uncertainty:
   wind:
     enabled: yes
     default: 0
-    range: [1, 19]
+    range: [ 1, 19 ]
     value: None
   gravity:
     enabled: yes
     default: -10
     range: [ -15, -5 ]
     value: None
-  random_start_position:
+  start_position:
     enabled: yes
     default: [ 300, 400 ]
     x_range: [ 0, 550 ]
@@ -24,9 +24,9 @@ uncertainty:
     value: None
 network:
   layers:
-    - nodes: 64
+    - nodes: 128
       activation: relu
-    - nodes: 64
+    - nodes: 128
       activation: relu
     - nodes: 4
       activation: linear
@@ -34,13 +34,14 @@ network:
   optimizer: adam
   learning_rate: 0.001
 training:
-  batch_size: 64
+  timesteps: 6
+  batch_size: 16
   epsilon:
     min: 0.01
     max: 0.2
     change: 1
-number_of_episodes: 350
-max_steps: 1000
+number_of_episodes: 700
+max_steps: 200
 number_of_actions: 4
 gamma: 0.99
 save_location: ../saved_models/

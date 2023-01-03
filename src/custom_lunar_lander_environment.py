@@ -51,8 +51,8 @@ class ContactDetector(contactListener):
 
     def BeginContact(self, contact):
         if (
-            self.env.lander == contact.fixtureA.body
-            or self.env.lander == contact.fixtureB.body
+                self.env.lander == contact.fixtureA.body
+                or self.env.lander == contact.fixtureB.body
         ):
             self.env.game_over = True
         for i in range(2):
@@ -170,20 +170,15 @@ class LunarLander(gym.Env, EzPickle):
 
     metadata = {"render_modes": ["human", "rgb_array"], "render_fps": FPS}
 
-    def __init__(
-        self,
-        config: dict,
-        continuous: bool = False    ):
+    def __init__(self, wind_power=None, gravity=None, start_position=None, continuous: bool = False):
 
-        start_position = config['uncertainty']['random_start_position']['value']
-        gravity = config['uncertainty']['gravity']['value']
-        enable_wind = config['uncertainty']['wind']['enabled']
-        wind_power = config['uncertainty']['wind']['value']
-
-        if config['general']['verbose']:
-            print(f'Constructing LunarLander environment with gravity: {gravity}, position: {start_position}, wind: {wind_power}')
+        enable_wind = True if wind_power else False
+        gravity = int(gravity)
 
         EzPickle.__init__(self)
+
+        print(
+            f'Constructing LunarLander environment with  wind: {wind_power}, gravity: {gravity}, position: {start_position}')
 
         # assert (
         #     -12.0 < gravity and gravity < 0.0
@@ -194,7 +189,6 @@ class LunarLander(gym.Env, EzPickle):
         #     0.0 < wind_power and wind_power < 20.0
         # ), f"wind_power (current value: {wind_power}) must be between 0 and 20"
         self.wind_power = wind_power
-
         self.enable_wind = enable_wind
         self.wind_idx = np.random.randint(-9999, 9999)
 
@@ -269,11 +263,11 @@ class LunarLander(gym.Env, EzPickle):
         self.world.DestroyBody(self.legs[1])
 
     def reset(
-        self,
-        *,
-        seed: Optional[int] = None,
-        return_info: bool = False,
-        options: Optional[dict] = None,
+            self,
+            *,
+            seed: Optional[int] = None,
+            return_info: bool = False,
+            options: Optional[dict] = None,
     ):
         super().reset(seed=seed)
         self._destroy()
@@ -368,7 +362,7 @@ class LunarLander(gym.Env, EzPickle):
             )
             if i == -1:
                 rjd.lowerAngle = (
-                    +0.9 - 0.5
+                        +0.9 - 0.5
                 )  # The most esoteric numbers here, angled legs have freedom to travel within
                 rjd.upperAngle = +0.9
             else:
@@ -409,16 +403,16 @@ class LunarLander(gym.Env, EzPickle):
     def step(self, action):
         # Update wind
         if self.enable_wind and not (
-            self.legs[0].ground_contact or self.legs[1].ground_contact
+                self.legs[0].ground_contact or self.legs[1].ground_contact
         ):
             # the function used for wind is tanh(sin(2 k x) + sin(pi k x)),
             # which is proven to never be periodic, k = 0.01
             wind_mag = (
-                math.tanh(
-                    math.sin(0.02 * self.wind_idx)
-                    + (math.sin(math.pi * 0.01 * self.wind_idx))
-                )
-                * self.wind_power
+                    math.tanh(
+                        math.sin(0.02 * self.wind_idx)
+                        + (math.sin(math.pi * 0.01 * self.wind_idx))
+                    )
+                    * self.wind_power
             )
             self.wind_idx += 1
             self.lander.ApplyForceToCenter(
@@ -440,7 +434,7 @@ class LunarLander(gym.Env, EzPickle):
 
         m_power = 0.0
         if (self.continuous and action[0] > 0.0) or (
-            not self.continuous and action == 2
+                not self.continuous and action == 2
         ):
             # Main engine
             if self.continuous:
@@ -471,7 +465,7 @@ class LunarLander(gym.Env, EzPickle):
 
         s_power = 0.0
         if (self.continuous and np.abs(action[1]) > 0.5) or (
-            not self.continuous and action in [1, 3]
+                not self.continuous and action in [1, 3]
         ):
             # Orientation engines
             if self.continuous:
@@ -482,10 +476,10 @@ class LunarLander(gym.Env, EzPickle):
                 direction = action - 2
                 s_power = 1.0
             ox = tip[0] * dispersion[0] + side[0] * (
-                3 * dispersion[1] + direction * SIDE_ENGINE_AWAY / SCALE
+                    3 * dispersion[1] + direction * SIDE_ENGINE_AWAY / SCALE
             )
             oy = -tip[1] * dispersion[0] - side[1] * (
-                3 * dispersion[1] + direction * SIDE_ENGINE_AWAY / SCALE
+                    3 * dispersion[1] + direction * SIDE_ENGINE_AWAY / SCALE
             )
             impulse_pos = (
                 self.lander.position[0] + ox - tip[0] * 17 / SCALE,
@@ -521,11 +515,11 @@ class LunarLander(gym.Env, EzPickle):
 
         reward = 0
         shaping = (
-            -100 * np.sqrt(state[0] * state[0] + state[1] * state[1])
-            - 100 * np.sqrt(state[2] * state[2] + state[3] * state[3])
-            - 100 * abs(state[4])
-            + 10 * state[6]
-            + 10 * state[7]
+                -100 * np.sqrt(state[0] * state[0] + state[1] * state[1])
+                - 100 * np.sqrt(state[2] * state[2] + state[3] * state[3])
+                - 100 * abs(state[4])
+                + 10 * state[6]
+                + 10 * state[7]
         )  # And ten points for legs contact, the idea is if you
         # lose contact again after landing, you get negative reward
         if self.prev_shaping is not None:
@@ -533,7 +527,7 @@ class LunarLander(gym.Env, EzPickle):
         self.prev_shaping = shaping
 
         reward -= (
-            m_power * 0.30
+                m_power * 0.30
         )  # less fuel spent is better, about -30 for heuristic landing
         reward -= s_power * 0.03
 
@@ -700,7 +694,7 @@ def heuristic(env, s):
     if s[6] or s[7]:  # legs have contact
         angle_todo = 0
         hover_todo = (
-            -(s[3]) * 0.5
+                -(s[3]) * 0.5
         )  # override to reduce fall speed, that's all we need after contact
 
     if env.continuous:
@@ -718,7 +712,6 @@ def heuristic(env, s):
 
 
 def demo_heuristic_lander(env, seed=None, render=False):
-
     total_reward = 0
     steps = 0
     s = env.reset(seed=seed)

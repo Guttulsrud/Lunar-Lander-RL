@@ -1,9 +1,10 @@
 import os
 
 import numpy as np
-from tensorflow.keras.layers import Dense, Input, LSTM
+from tensorflow.keras.layers import Dense, Input
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
+import tensorflow as tf
 from datetime import datetime
 
 from ReplayBuffer import ReplayBuffer
@@ -11,7 +12,8 @@ from utils import MODEL_TYPE
 
 
 class Agent:
-    def __init__(self, config, pre_trained_model):
+
+    def __init__(self, config, pre_trained_model=None):
         self.config = config
         self.exploration_rate = config['training']['epsilon']['max']
         self.exploration_rate_min = config['training']['epsilon']['min']
@@ -22,23 +24,21 @@ class Agent:
         if not pre_trained_model:
             if self.config['general']['model_type'] == MODEL_TYPE.SINGLE:
                 self.build_naive_model()
-            elif self.config['general']['model_type'] == MODEL_TYPE.DOUBLE:
-                self.build_double_timestep_model()
             elif self.config['general']['model_type'] == MODEL_TYPE.MULTI:
-                self.build_quad_timestep_model()
+                self.build_multi_timestep_model()
             else:
                 raise Exception('Invalid model type!')
         else:
             self.model = pre_trained_model
 
 
-    def build_quad_timestep_model(self):
+    def build_multi_timestep_model(self):
         layers = self.config['network']['layers']
         learning_rate = self.config['network']['learning_rate']
         loss_function = self.config['network']['loss_function']
         self.model = Sequential()
 
-        self.model.add(Input(shape=(self.config['input_dimensions'],)))
+        self.model.add(Input(shape=(self.config['training']['input_shape'],)))
 
         for layer in layers:
             self.model.add(Dense(layer['nodes'], activation=layer['activation']))
@@ -90,7 +90,7 @@ class Agent:
         current = current[np.newaxis, :]
         random_chance = np.random.uniform(0, 1)
         if random_chance > self.exploration_rate or policy == 'exploit':
-            prediction = self.model.predict(current)
+            prediction = self.model.predict(current, verbose=0)
             action = np.argmax(prediction)
         else:
             action = np.random.choice(self.action_space)
@@ -101,7 +101,22 @@ class Agent:
             return
 
         state, action, reward, next_state, done = self.memory.sample_batch(self.batch_size)
-        print(action)
+
+        q_values = self.model.predict(state)
+        next_q_values = self.model.predict(next_state)
+        max_next_q_value = tf.reduce_max(next_q_values, axis=1)
+        target_q_value = reward + (1 - done) * max_next_q_value
+        current_q_value = q_values[:, action]
+        loss = tf.reduce_mean(tf.square(target_q_value - current_q_value))
+
+        self.model.fit(loss, self.model.trainable_variables)
+
+    def learn2(self):
+        if self.memory.memory_counter < self.batch_size:
+            # There is not enough training data yet to fill a batch
+            return
+
+        state, action, reward, next_state, done = self.memory.sample_batch(self.batch_size)
 
         q_eval = self.model.predict(state)
         q_next = self.model.predict(next_state)

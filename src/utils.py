@@ -34,7 +34,6 @@ def load_model(path):
 
 class MODEL_TYPE:
     SINGLE = 'single'
-    DOUBLE = 'double'
     MULTI = 'multi'
 
 
@@ -42,12 +41,11 @@ def get_config(testing=False):
     with open('../config.yml') as f:
         config = yaml.load(f, Loader=SafeLoader)
 
-    if config['general']['model_type'] == MODEL_TYPE.SINGLE:
-        config['input_dimensions'] = 8
-    elif config['general']['model_type'] == MODEL_TYPE.DOUBLE:
-        config['input_dimensions'] = 17
-    elif config['general']['model_type'] == MODEL_TYPE.MULTI:
-        config['input_dimensions'] = 44
+    if config['general']['model_type'] == 'multi':
+        timesteps = config['training']['timesteps']
+        config['training']['input_shape'] = timesteps * 8 + (timesteps - 1) * 4
+    else:
+        config['training']['input_shape'] = 8
 
     if testing:
         config['general']['verbose'] = True
@@ -62,126 +60,79 @@ def one_hot(value, classes=4):
     return output
 
 
-def evaluate_multi_agent(environment, agent, config, episodes, timesteps=4):
-    episode_scores = []
+def memoize(f):
+    memo = {}
 
-    for episode in range(episodes):
+    def helper(self, x):
+        if x not in memo:
+            memo[x] = f(self, x)
+        return memo[x]
 
-        current_observation = environment.reset()
+    return helper
 
-        observations = [current_observation for _ in range(timesteps)]
-        actions = [[0, 0, 0, 0] for _ in range(timesteps - 1)]
 
+def evaluate_multi_agent(environment, agent, config):
+    current_observation = environment.reset()
+
+    timesteps = config['training']['timesteps']
+
+    observations = [current_observation for _ in range(timesteps)]
+    actions = [[0, 0, 0, 0] for _ in range(timesteps - 1)]
+
+    next_observations_and_actions = np.append(observations, actions)
+
+    score = 0.0
+
+    for step in range(config['max_steps']):
+        observations_and_actions = next_observations_and_actions
+        action = agent.choose_action(observations_and_actions, policy='exploit')
+        next_observation, reward, done, info = environment.step(action)
+
+        observations = np.roll(observations, shift=1, axis=0)
+        observations[0] = next_observation
+
+        actions = np.roll(actions, shift=1, axis=0)
+        actions[0] = one_hot(action)
         next_observations_and_actions = np.append(observations, actions)
 
-        score = 0.0
+        score += reward
 
-        for step in range(config['max_steps']):
-            observations_and_actions = next_observations_and_actions
-            action = agent.choose_action(observations_and_actions, policy='exploit')
+        if config['general']['render_evaluation']:
+            environment.render()
 
-            next_observation, reward, done, info = environment.step(action)
+        if done:
+            break
 
-            observations = np.roll(observations, shift=1, axis=0)
-            observations[0] = next_observation
-
-            actions = np.roll(actions, shift=1, axis=0)
-            actions[0] = one_hot(action)
-            next_observations_and_actions = np.append(observations, actions)
-
-            score += reward
-
-            if config['general']['render_evaluation']:
-                environment.render()
-
-            if done:
-                break
-
-        episode_scores.append(score)
-
-    average_return = sum(episode_scores) / config['evaluation_episodes']
-
-    return average_return, episode_scores
+    return score
 
 
-def evaluate_double_agent(environment, agent, config, episodes, render=False):
-    episode_scores = []
-
-    for episode in range(episodes):
-
-        current_observation = environment.reset()
-        previous_observation = current_observation
-        previous_action = 0
-
-        score = 0.0
-
-        for step in range(config['max_steps']):
-            previous_and_current = np.append(previous_observation, current_observation)
-            previous_and_current_observation = np.append(previous_and_current, previous_action)
-
-            action = agent.choose_action(previous_and_current_observation, policy='exploit')
-
-            next_observation, reward, done, info = environment.step(action)
-
-            previous_observation = current_observation
-            current_observation = next_observation
-            previous_action = action
-
-            score += reward
-            if render:
-                environment.render()
-
-            if done:
-                break
-
-        episode_scores.append(score)
-
-    average_return = sum(episode_scores) / config['evaluation_episodes']
-
-    return average_return, episode_scores
-
-
-def evaluate_agent(environment, agent, config, episodes):
+def evaluate_agent(environment, agent, config):
     if config['general']['model_type'] == MODEL_TYPE.SINGLE:
         return evaluate_single_agent(environment=environment,
                                      agent=agent,
-                                     config=config,
-                                     episodes=episodes)
-    elif config['general']['model_type'] == MODEL_TYPE.DOUBLE:
-        return evaluate_double_agent(environment=environment,
-                                     agent=agent,
-                                     config=config,
-                                     episodes=episodes)
+                                     config=config)
     elif config['general']['model_type'] == MODEL_TYPE.MULTI:
         return evaluate_multi_agent(environment=environment,
                                     agent=agent,
-                                    config=config,
-                                    episodes=episodes)
+                                    config=config)
 
 
-def evaluate_single_agent(environment, agent, config, episodes):
-    episode_scores = []
+def evaluate_single_agent(environment, agent, config):
+    observation = environment.reset()
+    score = 0.0
 
-    for episode in range(episodes):
+    for step in range(config['max_steps']):
+        action = agent.choose_action(observation, policy='exploit')
+        next_observation, reward, done, info = environment.step(action)
+        score += reward
+        observation = next_observation
+        if config['general']['render_evaluation']:
+            environment.render()
 
-        observation = environment.reset()
-        score = 0.0
+        if done:
+            break
 
-        for step in range(config['max_steps']):
-            action = agent.choose_action(observation, policy='exploit')
-            next_observation, reward, done, info = environment.step(action)
-            score += reward
-            observation = next_observation
-            if config['general']['render_evaluation']:
-                environment.render()
-
-            if done:
-                break
-        episode_scores.append(score)
-
-    average_return = sum(episode_scores) / episodes
-
-    return average_return, episode_scores
+    return score
 
 
 def determine_uncertainties(config):

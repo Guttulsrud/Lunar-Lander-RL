@@ -13,7 +13,7 @@ def evaluate_agent(agent, render=True, verbose=True):
         pos = [randrange(0, 550), 400]
         grav = randrange(-15, -5)
         wind = randrange(1, 19)
-        config['uncertainty']['random_start_position']['value'] = pos
+        config['uncertainty']['start_position']['value'] = pos
         config['uncertainty']['gravity']['value'] = grav
         config['uncertainty']['wind']['value'] = wind
 
