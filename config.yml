@@ -1,6 +1,6 @@
 ---
 general:
-  model_type: single #Pick from: single, multi
+  model_type: single #single, multi
   save_results: yes
   render_training: no
   render_evaluation: no
@@ -40,7 +40,7 @@ training:
     min: 0.01
     max: 0.2
     change: 1
-number_of_episodes: 700
+number_of_episodes: 3
 max_steps: 200
 number_of_actions: 4
 gamma: 0.99
