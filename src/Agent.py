@@ -96,22 +96,22 @@ class Agent:
             action = np.random.choice(self.action_space)
         return action
 
+    # def learn(self):
+    #     if self.memory.memory_counter < self.batch_size:
+    #         return
+    #
+    #     state, action, reward, next_state, done = self.memory.sample_batch(self.batch_size)
+    #
+    #     q_values = self.model.predict(state)
+    #     next_q_values = self.model.predict(next_state)
+    #     max_next_q_value = tf.reduce_max(next_q_values, axis=1)
+    #     target_q_value = reward + (1 - done) * max_next_q_value
+    #     current_q_value = q_values[:, action]
+    #     loss = tf.reduce_mean(tf.square(target_q_value - current_q_value))
+    #
+    #     self.model.fit(loss, self.model.trainable_variables)
+
     def learn(self):
-        if self.memory.memory_counter < self.batch_size:
-            return
-
-        state, action, reward, next_state, done = self.memory.sample_batch(self.batch_size)
-
-        q_values = self.model.predict(state)
-        next_q_values = self.model.predict(next_state)
-        max_next_q_value = tf.reduce_max(next_q_values, axis=1)
-        target_q_value = reward + (1 - done) * max_next_q_value
-        current_q_value = q_values[:, action]
-        loss = tf.reduce_mean(tf.square(target_q_value - current_q_value))
-
-        self.model.fit(loss, self.model.trainable_variables)
-
-    def learn2(self):
         if self.memory.memory_counter < self.batch_size:
             # There is not enough training data yet to fill a batch
             return
