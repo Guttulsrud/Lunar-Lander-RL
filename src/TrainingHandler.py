@@ -72,8 +72,7 @@ class TrainingHandler:
 
     def simulate(self, robust=False):
 
-        avg_total = []
-        scores_total = []
+        all_scores = []
 
         evaluations_per_configuration = 3 if robust else 1
         number_of_configurations = 11 if robust else 3
@@ -116,30 +115,30 @@ class TrainingHandler:
                                          config=self.config,
                                          episodes=1)
 
-            avg_total.append(avg)
-            scores_total += scores
+            all_scores += scores
 
-        avg = np.mean(avg_total)
-        return avg, scores_total
+        return all_scores
 
-    def evaluate(self, episode):
+    def evaluate(self, episode, mode='min'):
         print('Evaluating..')
         self.reload_config()
         self.determine_uncertainties()
 
-        avg, scores = self.simulate()
-        print('Agent got average return on simple evaluation: ', avg)
+        simple_eval_scores = self.simulate()
 
-        self.agent.save_model(score=avg)
 
-        if avg > self.config['robust_test_threshold'] and avg > self.best_score:
+        print('Agent got average return on simple evaluation: ', simple_eval_avg)
+
+        self.agent.save_model(score=simple_eval_avg)
+
+        if simple_eval_avg > self.config['robust_test_threshold']:
             print('Agent received score above threshold')
-            avg, scores = self.simulate(robust=True)
-            print(f'Agent received score of {avg} on robust test')
+            robust_eval_avg, robust_eval_scores = self.simulate(robust=True)
+            print(f'Agent received score of {robust_eval_avg} on robust test')
 
-            if avg > self.best_score:
+            if robust_eval_avg > self.best_score:
                 print('Agent is new best. Saving model')
-                self.best_score = avg
+                self.best_score = robust_eval_avg
 
         if self.config['general']['save_results']:
             self.save_results_to_file(episode=episode, avg=avg, scores=scores)
@@ -188,42 +187,6 @@ class TrainingHandler:
 
         self.evaluate(episode)
 
-    def run_double_episode(self, episode):
-        self.reload_config()
-        self.determine_uncertainties()
-        self.environment = LunarLander(self.config)
-
-        current_observation = self.environment.reset()
-        previous_observation = current_observation
-        previous_action = 0
-
-        for step in range(self.config['max_steps']):
-            if self.testing:
-                break
-
-            if self.config['general']['render_training']:
-                self.environment.render()
-
-            previous_and_current = np.append(previous_observation, current_observation)
-            previous_and_current_observation = np.append(previous_and_current, previous_action)
-
-            action = self.agent.choose_action(previous_and_current_observation)
-            next_observation, reward, done, info = self.environment.step(action)
-            current_and_next = np.append(current_observation, next_observation)
-            current_and_next_observation = np.append(current_and_next, action)
-
-            self.agent.remember(previous_and_current_observation, action, reward, current_and_next_observation, done)
-            self.agent.learn()
-
-            previous_observation = current_observation
-            current_observation = next_observation
-            previous_action = action
-
-            if done:
-                break
-
-        self.evaluate(episode)
-
     def run_single_episode(self, episode):
         self.reload_config()
         self.determine_uncertainties()
@@ -239,7 +202,6 @@ class TrainingHandler:
 
             action = self.agent.choose_action(observation)
             next_observation, reward, done, info = self.environment.step(action)
-
             self.agent.remember(observation, action, reward, next_observation, done)
             self.agent.learn()
 

@@ -3,7 +3,7 @@ general:
   model_type: single #Pick from: single, double, multi
   save_results: yes
   render_training: no
-  render_evaluation: yes
+  render_evaluation: no
   verbose: yes
 uncertainty:
   wind:
@@ -47,5 +47,5 @@ save_location: ../saved_models/
 memory:
   size: 1000000
 evaluation_episodes: 1
-best_score: -200
-robust_test_threshold: 200
+best_score: 100
+robust_test_threshold: 100

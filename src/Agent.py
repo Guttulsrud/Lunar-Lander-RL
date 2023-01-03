@@ -31,7 +31,6 @@ class Agent:
         else:
             self.model = pre_trained_model
 
-        print(self.model.summary())
 
     def build_quad_timestep_model(self):
         layers = self.config['network']['layers']
@@ -99,26 +98,20 @@ class Agent:
 
     def learn(self):
         if self.memory.memory_counter < self.batch_size:
-            # There is not enough training data yet to fill a batch
             return
 
         state, action, reward, next_state, done = self.memory.sample_batch(self.batch_size)
-
-        action_values = np.array(self.action_space, dtype=np.int8)
-        action_indices = np.dot(action, action_values)
-        action_indices = [int(x) for x in action_indices]
+        print(action)
 
         q_eval = self.model.predict(state)
         q_next = self.model.predict(next_state)
 
-        q_target = q_eval.copy()
-
         batch_index = np.arange(self.batch_size, dtype=np.int32)
 
         gradients = reward + self.config['gamma'] * np.max(q_next, axis=1) * (1 - done)
-        q_target[batch_index, action_indices] = gradients
+        q_eval[batch_index, action] = gradients
 
-        self.model.fit(state, q_target, verbose=0)
+        self.model.fit(state, q_eval, verbose=0)
 
         if self.exploration_rate > self.exploration_rate_min:
             self.exploration_rate *= self.exploration_rate_decrement

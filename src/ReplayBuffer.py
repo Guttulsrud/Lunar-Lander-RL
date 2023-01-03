@@ -11,19 +11,19 @@ class ReplayBuffer:
         self.memory_counter = 0
         self.state_memory = np.zeros((self.memory_size, self.input_dimensions))
         self.next_state_memory = np.zeros((self.memory_size, self.input_dimensions))
-        self.action_memory = np.zeros((self.memory_size, self.number_of_actions))
+        self.action_memory = np.zeros(self.memory_size, dtype=np.int32)
         self.reward_memory = np.zeros(self.memory_size)
         self.done_memory = np.zeros(self.memory_size)
 
     def store(self, state, action, reward, next_state, done):
         index = self.memory_counter % self.memory_size
+
         self.state_memory[index] = state
         self.reward_memory[index] = reward
         self.next_state_memory[index] = next_state
         self.done_memory[index] = done
-
-        action = reverse_one_hot(action, self.number_of_actions)
         self.action_memory[index] = action
+
         self.memory_counter += 1
 
     def sample_batch(self, batch_size):
