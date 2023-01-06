@@ -40,13 +40,13 @@ training:
     min: 0.01
     max: 0.2
     change: 1
-number_of_episodes: 3
-max_steps: 200
+number_of_episodes: 200
+max_steps: 100
 number_of_actions: 4
 gamma: 0.99
 save_location: ../saved_models/
 memory:
-  size: 1000000
+  size: 50000
 evaluation_episodes: 1
 best_score: 100
 robust_test_threshold: 100
