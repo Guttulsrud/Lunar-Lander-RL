@@ -39,16 +39,11 @@ class TrainingHandler(object):
     def run_hpo(self):
 
         def optimize(trial):
-            self.created_at = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
-            self.created_at += f'_{randrange(1000000000000)}'
-            if self.config['general']['save_results']:
-                self.create_result_file()
-
             learning_rate = trial.suggest_categorical('learning_rate', [0.0001, 0.0003, 0.001, 0.003, 0.01])
             batch_size = trial.suggest_categorical('batch_size', [32, 64, 128])
             hidden_size = trial.suggest_categorical('hidden_size', [64, 128, 256, 512])
             layers = trial.suggest_categorical('layers', [2, 3, 4])
-            activation = trial.suggest_categorical('activation', ['relu', 'swish'])
+            activation = trial.suggest_categorical('activation', ['relu'])
 
             hparams = {
                 'learning_rate': learning_rate,
@@ -62,16 +57,20 @@ class TrainingHandler(object):
             return evaluation_metric
 
         study = optuna.create_study()
-        study.optimize(optimize, n_trials=4, n_jobs=2)
+        study.optimize(optimize, n_trials=8, n_jobs=2)
 
         print(study.best_params)
 
     def run(self, hparams):
+        self.created_at = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
+        self.created_at += f'_{randrange(1000000000000)}'
+        if self.config['general']['save_results']:
+            self.create_result_file()
 
         self.agent = Agent(config=self.config, hparams=hparams)
 
         for episode in range(self.config['number_of_episodes']):
-            # print(f'\n----- EPISODE {episode}/{self.config["number_of_episodes"]} -----\n')
+            print(f'\n----- EPISODE {episode}/{self.config["number_of_episodes"]} -----\n')
             if self.config['general']['model_type'] == MODEL_TYPE.SINGLE:
                 score = self.run_single_episode(episode)
             elif self.config['general']['model_type'] == MODEL_TYPE.MULTI:
