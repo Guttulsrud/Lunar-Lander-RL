@@ -23,7 +23,7 @@ def run_episode(wind, gravity, start_position, agent, config):
 
 class TrainingHandler(object):
 
-    def __init__(self, dev_note='', pre_trained_model=None, testing=False):
+    def __init__(self, thread, trial, dev_note='', pre_trained_model=None, testing=False):
         self.testing = testing
         self.config = get_config(testing)
         self.dev_note = dev_note
@@ -31,6 +31,8 @@ class TrainingHandler(object):
         self.agent = None
         self.created_at = None
         self.environment = None
+        self.thread = thread
+        self.trial = trial
         self.best_score = self.config['best_score']
 
         # if self.config['general']['save_results']:
@@ -70,7 +72,7 @@ class TrainingHandler(object):
         self.agent = Agent(config=self.config, hparams=hparams)
 
         for episode in range(self.config['number_of_episodes']):
-            print(f'\n----- EPISODE {episode}/{self.config["number_of_episodes"]} -----\n')
+            print(f'\nTHREAD {self.thread + 1} // TRIAL {self.trial + 1} ----- EPISODE {episode + 1}/{self.config["number_of_episodes"]}')
             if self.config['general']['model_type'] == MODEL_TYPE.SINGLE:
                 score = self.run_single_episode(episode)
             elif self.config['general']['model_type'] == MODEL_TYPE.MULTI:
@@ -273,7 +275,7 @@ class TrainingHandler(object):
         return self.evaluation(episode)
 
     def save_results_to_file(self, episode, simple_eval_scores, robust_eval_scores):
-        with open(f'../results/{self.created_at}.json', 'r') as f:
+        with open(f'../results/{self.created_at}_THREAD{self.thread + 1}_TRIAL{self.trial + 1}.json', 'r') as f:
             results = json.load(f)
             results['results'].append(
                 {
@@ -283,7 +285,7 @@ class TrainingHandler(object):
                     'uncertainty': self.config['uncertainty'],
                 })
 
-        with open(f'../results/{self.created_at}.json', 'w') as f:
+        with open(f'../results/{self.created_at}_THREAD{self.thread + 1}_TRIAL{self.trial + 1}.json', 'w') as f:
             json.dump(results, f)
 
     def create_result_file(self):
@@ -292,5 +294,5 @@ class TrainingHandler(object):
         if not is_dir:
             os.mkdir('../results')
 
-        with open(f'../results/{self.created_at}.json', 'w') as f:
+        with open(f'../results/{self.created_at}_THREAD{self.thread + 1}_TRIAL{self.trial + 1}.json', 'w') as f:
             json.dump({'note': self.dev_note, 'results': [], 'config': self.config}, f)
