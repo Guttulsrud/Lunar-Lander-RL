@@ -40,7 +40,7 @@ training:
     min: 0.01
     max: 0.2
     change: 1
-number_of_episodes: 200
+number_of_episodes: 350
 max_steps: 100
 number_of_actions: 4
 gamma: 0.99

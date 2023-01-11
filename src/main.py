@@ -20,14 +20,14 @@ def run_thread(thread, trials):
 
         dev_note = f'Single thread {thread + 1} trial {trial + 1}'
 
-        h = TrainingHandler(dev_note=dev_note, thread=thread, trial=trial)
+        h = TrainingHandler(dev_note=dev_note, thread=thread, trial=trial, hparams=hparams)
 
         h.run(hparams)
 
 
 if __name__ == '__main__':
-    n_threads = 8
-    n_trials = 2
+    n_threads = 4
+    n_trials = 3
     threads = []
 
     for thread in range(n_threads):

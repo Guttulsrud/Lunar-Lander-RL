@@ -23,7 +23,7 @@ def run_episode(wind, gravity, start_position, agent, config):
 
 class TrainingHandler(object):
 
-    def __init__(self, thread, trial, dev_note='', pre_trained_model=None, testing=False):
+    def __init__(self, thread, trial, hparams, dev_note='', pre_trained_model=None, testing=False):
         self.testing = testing
         self.config = get_config(testing)
         self.dev_note = dev_note
@@ -33,6 +33,7 @@ class TrainingHandler(object):
         self.environment = None
         self.thread = thread
         self.trial = trial
+        self.hparams = hparams
         self.best_score = self.config['best_score']
 
         # if self.config['general']['save_results']:
@@ -295,4 +296,4 @@ class TrainingHandler(object):
             os.mkdir('../results')
 
         with open(f'../results/{self.created_at}_THREAD{self.thread + 1}_TRIAL{self.trial + 1}.json', 'w') as f:
-            json.dump({'note': self.dev_note, 'results': [], 'config': self.config}, f)
+            json.dump({'note': self.dev_note, 'results': [], 'config': self.config, 'hparams': self.hparams}, f)
