@@ -12,7 +12,7 @@ def run_thread(thread, trials):
         'batch_size': random.choice([32, 64, 128]),
         'hidden_size': random.choice([64, 128, 256, 512]),
         'layers': random.choice([2, 3, 4]),
-        'activation': random.choice(['relu', 'tanh', 'sigmoid'])
+        'activation': random.choice(['relu', 'swish'])
     }
 
     for trial in range(trials):
