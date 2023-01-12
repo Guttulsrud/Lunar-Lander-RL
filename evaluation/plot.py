@@ -12,6 +12,8 @@ def plot_results(file_names):
     sns.set_context("paper", font_scale=1)
 
     for i, file_name in enumerate(file_names):
+        if 'THREAD2' not in file_name:
+            continue
         with open(f'../results/{file_name}', 'r') as f:
             r = json.load(f)
 

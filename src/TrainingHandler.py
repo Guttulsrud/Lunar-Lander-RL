@@ -26,6 +26,8 @@ class TrainingHandler(object):
     def __init__(self, thread, trial, hparams, dev_note='', pre_trained_model=None, testing=False):
         self.testing = testing
         self.config = get_config(testing)
+        self.hparams = hparams
+        self.config['training']['input_shape'] = self.hparams['timesteps'] * 8 + (self.hparams['timesteps'] - 1) * 4
         self.dev_note = dev_note
         # self.agent = Agent(config=self.config, pre_trained_model=pre_trained_model)
         self.agent = None
@@ -33,7 +35,6 @@ class TrainingHandler(object):
         self.environment = None
         self.thread = thread
         self.trial = trial
-        self.hparams = hparams
         self.best_score = self.config['best_score']
 
         # if self.config['general']['save_results']:
@@ -73,7 +74,8 @@ class TrainingHandler(object):
         self.agent = Agent(config=self.config, hparams=hparams)
 
         for episode in range(self.config['number_of_episodes']):
-            print(f'\nTHREAD {self.thread + 1} // TRIAL {self.trial + 1} ----- EPISODE {episode + 1}/{self.config["number_of_episodes"]}')
+            print(
+                f'\nTHREAD {self.thread + 1} // TRIAL {self.trial + 1} ----- EPISODE {episode + 1}/{self.config["number_of_episodes"]}')
             if self.config['general']['model_type'] == MODEL_TYPE.SINGLE:
                 score = self.run_single_episode(episode)
             elif self.config['general']['model_type'] == MODEL_TYPE.MULTI:
@@ -83,6 +85,7 @@ class TrainingHandler(object):
 
     def reload_config(self):
         self.config = get_config()
+        self.config['training']['timesteps'] = self.hparams['timesteps']
 
     def determine_uncertainties(self):
         gravity = self.config['uncertainty']['gravity']

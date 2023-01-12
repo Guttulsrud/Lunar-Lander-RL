@@ -1,6 +1,6 @@
 ---
 general:
-  model_type: single #single, multi
+  model_type: multi #single, multi
   save_results: yes
   render_training: no
   render_evaluation: no
