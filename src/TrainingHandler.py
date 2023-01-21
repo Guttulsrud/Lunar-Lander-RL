@@ -40,31 +40,6 @@ class TrainingHandler(object):
         # if self.config['general']['save_results']:
         #     self.create_result_file()
 
-    def run_hpo(self):
-
-        def optimize(trial):
-            learning_rate = trial.suggest_categorical('learning_rate', [0.0001, 0.0003, 0.001, 0.003, 0.01])
-            batch_size = trial.suggest_categorical('batch_size', [32, 64, 128])
-            hidden_size = trial.suggest_categorical('hidden_size', [64, 128, 256, 512])
-            layers = trial.suggest_categorical('layers', [2, 3, 4])
-            activation = trial.suggest_categorical('activation', ['relu'])
-
-            hparams = {
-                'learning_rate': learning_rate,
-                'batch_size': batch_size,
-                'hidden_size': hidden_size,
-                'layers': layers,
-                'activation': activation
-            }
-
-            evaluation_metric = self.run(hparams)
-            return evaluation_metric
-
-        study = optuna.create_study()
-        study.optimize(optimize, n_trials=8, n_jobs=2)
-
-        print(study.best_params)
-
     def run(self, hparams):
         self.created_at = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
         self.created_at += f'_{randrange(1000000000000)}'

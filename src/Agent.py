@@ -36,15 +36,20 @@ class Agent:
             self.model = pre_trained_model
 
     def build_multi_timestep_model(self):
-        layers = self.config['network']['layers']
-        learning_rate = self.config['network']['learning_rate']
+        learning_rate = self.hparams['learning_rate']
+        hidden_size = self.hparams['hidden_size']
+        layers = self.hparams['layers']
+        activation = self.hparams['activation']
+
         loss_function = self.config['network']['loss_function']
         self.model = Sequential()
 
         self.model.add(Input(shape=(self.config['training']['input_shape'],)))
 
-        for layer in layers:
-            self.model.add(Dense(layer['nodes'], activation=layer['activation']))
+        for _ in range(layers):
+            self.model.add(Dense(hidden_size, activation=activation))
+
+        self.model.add(Dense(4, activation='linear'))
 
         self.model.compile(loss=loss_function, optimizer=Adam(learning_rate))
 
