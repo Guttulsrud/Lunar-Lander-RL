@@ -12,12 +12,14 @@ def plot_results(file_names):
     sns.set_context("paper", font_scale=1)
 
     for i, file_name in enumerate(file_names):
-        if 'THREAD2' not in file_name:
-            continue
+        # if 'THREAD2' not in file_name:
+        #     continue
         with open(f'../results/{file_name}', 'r') as f:
             r = json.load(f)
 
         results = [np.average(x['simple_eval_scores']) for x in r['results']]
+        if not len(results):
+            continue
         print(i, r['hparams'], max(results))
         plt.plot(results, label=i)
 

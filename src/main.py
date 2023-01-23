@@ -8,10 +8,10 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 def run_thread(thread, trials):
     hparams = {
-        'learning_rate': random.choice([0.0001, 0.0003, 0.001, 0.003, 0.01]),
-        'batch_size': random.choice([32, 64, 128]),
-        'hidden_size': random.choice([64, 128, 256, 512]),
-        'layers': random.choice([2, 3, 4]),
+        'learning_rate': random.choice([0.001]),
+        'batch_size': random.choice([64]),
+        'hidden_size': random.choice([128]),
+        'layers': random.choice([2]),
         'activation': random.choice(['relu']),
         'timesteps': random.choice([2, 3, 4, 5, 6])
     }
@@ -27,8 +27,8 @@ def run_thread(thread, trials):
 
 
 if __name__ == '__main__':
-    n_threads = 4
-    n_trials = 3
+    n_threads = 3
+    n_trials = 2
     threads = []
 
     for thread in range(n_threads):
