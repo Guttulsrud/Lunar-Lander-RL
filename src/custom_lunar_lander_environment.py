@@ -513,6 +513,9 @@ class LunarLander(gym.Env, EzPickle):
         ]
         assert len(state) == 8
 
+        # print('x: ', pos.x)
+        print('x: ', (pos.x - VIEWPORT_W / SCALE / 2) / (VIEWPORT_W / SCALE / 2))
+
         reward = 0
         shaping = (
                 -100 * np.sqrt(state[0] * state[0] + state[1] * state[1])

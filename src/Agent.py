@@ -83,6 +83,7 @@ class Agent:
             action = np.argmax(prediction)
         else:
             action = np.random.choice(self.action_space)
+
         return action
 
     def learn(self):

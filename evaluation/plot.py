@@ -11,13 +11,16 @@ def plot_results(file_names):
     sns.set_style('white')
     sns.set_context("paper", font_scale=1)
 
+    file_names = file_names[30:]
+
     for i, file_name in enumerate(file_names):
         # if 'THREAD2' not in file_name:
         #     continue
+        print(file_name)
         with open(f'../results/{file_name}', 'r') as f:
             r = json.load(f)
-
         results = [np.average(x['simple_eval_scores']) for x in r['results']]
+        print(max([np.max(x['episode']) for x in r['results']]))
         if not len(results):
             continue
         print(i, r['hparams'], max(results))
@@ -25,8 +28,10 @@ def plot_results(file_names):
 
     ax = plt.gca()
     ax.axhline(200, color='red', label='Success')
-    ax.axhline(0, color='green', label='Failure')
-    plt.legend(loc='upper right')
+    # ax.axhline(0, color='green', label='Failure')
+    ax.set(ylim=(-300, 250))
+
+    # plt.legend(loc='upper right')
     ax.set(xlabel='Episodes', ylabel='Score')
     plt.title("Multiple Line Plot")
     plt.show()

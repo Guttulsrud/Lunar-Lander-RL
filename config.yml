@@ -2,7 +2,7 @@
 general:
   model_type: multi #single, multi
   save_results: yes
-  render_training: no
+  render_training: yes
   render_evaluation: no
   verbose: no
 uncertainty:
