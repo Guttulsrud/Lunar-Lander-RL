@@ -513,9 +513,6 @@ class LunarLander(gym.Env, EzPickle):
         ]
         assert len(state) == 8
 
-        # print('x: ', pos.x)
-        print('x: ', (pos.x - VIEWPORT_W / SCALE / 2) / (VIEWPORT_W / SCALE / 2))
-
         reward = 0
         shaping = (
                 -100 * np.sqrt(state[0] * state[0] + state[1] * state[1])
@@ -541,6 +538,15 @@ class LunarLander(gym.Env, EzPickle):
         if not self.lander.awake:
             done = True
             reward = +100
+
+        x = (pos.x - VIEWPORT_W / SCALE / 2) / (VIEWPORT_W / SCALE / 2)
+        y = (pos.y - (self.helipad_y + LEG_DOWN / SCALE)) / (VIEWPORT_H / SCALE / 2)
+
+        if x < -1.5 or x > 1.5 or y > 2:
+            print('lander escaped bounds')
+            done = True
+            reward = -100
+
         return np.array(state, dtype=np.float32), reward, done, {}
 
     def render(self, mode="human"):
