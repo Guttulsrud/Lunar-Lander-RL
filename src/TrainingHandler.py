@@ -4,7 +4,7 @@ import os
 from random import randrange
 from datetime import datetime
 import numpy as np
-import optuna
+import time
 
 from Agent import Agent
 from utils import get_config, MODEL_TYPE, evaluate_agent, one_hot, memoize
@@ -49,7 +49,7 @@ class TrainingHandler(object):
         self.agent = Agent(config=self.config, hparams=hparams)
 
         for episode in range(self.config['number_of_episodes']):
-            print(f'EPISODE {episode}')
+            print(f'EPISODE {episode + 1}')
             # print(
             #     f'\nTHREAD {self.thread + 1} // TRIAL {self.trial + 1} ----- EPISODE {episode + 1}/{self.config["number_of_episodes"]}')
             if self.config['general']['model_type'] == MODEL_TYPE.SINGLE:
@@ -159,12 +159,12 @@ class TrainingHandler(object):
 
         robust_eval_scores = [0]  # ensures that we can do avg
 
-        if self.config['robust_test_threshold'] < score:
-            robust_eval_scores = self.evaluate(mode='robust')
-            robust_eval_scores += simple_eval_scores
-            score = np.average(robust_eval_scores)
+        # if self.config['robust_test_threshold'] < score:
+        #     robust_eval_scores = self.evaluate(mode='robust')
+        #     robust_eval_scores += simple_eval_scores
+        #     score = np.average(robust_eval_scores)
 
-            # print(f'Received average score of {score} on robust evaluation')
+        # print(f'Received average score of {score} on robust evaluation')
 
         if self.config['general']['save_results']:
             # self.agent.save_model(score=score)
@@ -172,9 +172,11 @@ class TrainingHandler(object):
                                       simple_eval_scores=simple_eval_scores,
                                       robust_eval_scores=robust_eval_scores)
 
-        return score
+        return score, simple_eval_scores
 
     def run_multi_episode(self, episode):
+        start_time = time.time()
+
         self.reload_config()
         self.determine_uncertainties()
 
@@ -193,8 +195,9 @@ class TrainingHandler(object):
         next_observations_and_actions = np.append(observations, actions)
 
         score = 0.0
+        timesteps = 0
 
-        for _ in range(self.config['max_steps']):
+        for timestep in range(self.config['max_steps']):
             if self.testing:
                 break
 
@@ -219,10 +222,24 @@ class TrainingHandler(object):
             self.agent.remember(observations_and_actions, action, reward, next_observations_and_actions, done)
             self.agent.learn()
 
+            timesteps = timestep + 1
+
             if done:
                 break
 
-        self.evaluation(episode)
+        # score
+        # timestep
+        score, simple_eval_scores = self.evaluation(episode)
+
+        with open(f'../results/{self.created_at}-{self.dev_note}/log.txt', "a") as log:
+            log.write(
+                f'EPISODE {episode + 1}: '
+                f'time: {time.time() - start_time}s, '
+                f'score: {score}, '
+                f'timesteps: {timesteps}, '
+                f'wind: {wind}, '
+                f'gravity: {gravity}, '
+                f'start_position: {start_position}\n')
 
     def run_single_episode(self, episode):
         self.reload_config()
