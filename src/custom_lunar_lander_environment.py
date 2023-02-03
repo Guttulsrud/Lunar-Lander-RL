@@ -543,7 +543,6 @@ class LunarLander(gym.Env, EzPickle):
         y = (pos.y - (self.helipad_y + LEG_DOWN / SCALE)) / (VIEWPORT_H / SCALE / 2)
 
         if x < -1.5 or x > 1.5 or y > 2:
-            print('lander escaped bounds')
             done = True
             reward = -100
 
